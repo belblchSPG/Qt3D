@@ -60,7 +60,7 @@ void Scene::GenerateCuboidByLWHC(QVector<QVector<QLineEdit *>> vector)
 
 void Scene::CollisionDetection()
 {
-    qDebug() << "Collision detection started!";
+    qDebug() << "Collision detection started";
 
     // Перебираем все кубоиды на сцене
     for (Parallelepiped* c1 : _sceneObjects)
@@ -75,13 +75,11 @@ void Scene::CollisionDetection()
                 // Проверка на пересечение
                 if (CheckCollision(c1, c2))
                 {
-                    qDebug() << "Colors changed red!";
                     c1->SetColor(Qt::red);
                     c2->SetColor(Qt::red);
                 }
                 else
                 {
-                    qDebug() << "Colors changed green!";
                     if(c1->getColor()!=Qt::red)
                     {
                        c1->SetColor(Qt::green);
@@ -109,20 +107,6 @@ bool Scene::CheckCollision(Parallelepiped* p1, Parallelepiped* p2)
 
     bool overlapZ = (p1->Center().z() - p1->Length()/2) <= (p2->Center().z() + p2->Length()/2) &&
                     (p1->Center().z() + p1->Length()/2) >= (p2->Center().z() - p2->Length()/2);
-
-    if(overlapX)
-    {
-        qDebug() << "X";
-    }
-    if(overlapY)
-    {
-        qDebug() << "Y";
-    }
-    if(overlapZ)
-    {
-        qDebug() << "Z";
-    }
-
 
     if (overlapX && overlapY && overlapZ) {
         return true;
