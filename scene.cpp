@@ -110,19 +110,6 @@ bool Scene::CheckCollision(Parallelepiped* p1, Parallelepiped* p2)
     bool overlapZ = (p1->Center().z() - p1->Length()/2) <= (p2->Center().z() + p2->Length()/2) &&
                     (p1->Center().z() + p1->Length()/2) >= (p2->Center().z() - p2->Length()/2);
 
-
-    // Проверка наличия общих вершин
-    bool commonVertices = (p1->Center() == p2->Center() + QVector3D(p2->Width()/2, p2->Height()/2, p2->Length()/2)) ||
-                          (p2->Center() == p1->Center() + QVector3D(p1->Width()/2, p1->Height()/2, p1->Length()/2));
-
-    // Проверка одного параллелепипеда внутри другого
-    bool insideCheck = (p1->Center().x() - p1->Width()/2 >= p2->Center().x() - p2->Width()/2) &&
-                       (p1->Center().x() + p1->Width()/2 <= p2->Center().x() + p2->Width()/2) &&
-                       (p1->Center().y() - p1->Height()/2 >= p2->Center().y() - p2->Height()/2) &&
-                       (p1->Center().y() + p1->Height()/2 <= p2->Center().y() + p2->Height()/2) &&
-                       (p1->Center().z() - p1->Length()/2 >= p2->Center().z() - p2->Length()/2) &&
-                       (p1->Center().z() + p1->Length()/2 <= p2->Center().z() + p2->Length()/2);
-
     if(overlapX)
     {
         qDebug() << "X";
@@ -137,16 +124,7 @@ bool Scene::CheckCollision(Parallelepiped* p1, Parallelepiped* p2)
     }
 
 
-    // Ваши дальнейшие действия в зависимости от результата проверок
     if (overlapX && overlapY && overlapZ) {
-        return true;
-    }
-    if(commonVertices)
-    {
-        return true;
-    }
-    if(insideCheck)
-    {
         return true;
     }
     return false;
