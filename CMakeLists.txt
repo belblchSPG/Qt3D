@@ -6,7 +6,7 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
@@ -32,6 +32,14 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 
         Icons/arrow-39-16.png
         C:/Users/User/Downloads/arrow-39-16.png
+
+
+
+        object.h object.cpp
+        mathrepr.h mathrepr.cpp
+        mathparallrepr.h mathparallrepr.cpp
+        graphicrepr.h graphicrepr.cpp
+        graphicparallrepr.h graphicparallrepr.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET Qt3D-Test APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
@@ -84,3 +92,5 @@ install(TARGETS Qt3D-Test
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(Qt3D-Test)
 endif()
+
+
