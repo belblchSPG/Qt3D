@@ -3,24 +3,22 @@
 
 #include "graphicparallrepr.h"
 #include "mathparallrepr.h"
-
-#include <Qt3DExtras>
-#include <Qt3DCore>
-
-#include <QVector3D>
-#include <QColor>
 #include <stdexcept>
+#include <memory>
 
 //Класс, который отвечает за представление параллелепипеда на сцене.
-//В нем хранится разделное представление математики и графики объекта
+//В нем хранится раздельное представление математики и графики объекта
 class Parallelepiped
 {
+private:
+    std::unique_ptr<MathParallRepr> _parallMath;
+    std::unique_ptr<GraphicParallRepr> _parallGraphic;
+
 public:
     Parallelepiped(float, float, float, QVector3D, Qt3DCore::QEntity*);
 
-private:
-    MathParallRepr* _parallMath;
-    GraphicParallRepr* _parallGraphic;
+    GraphicParallRepr* GraphicsRepr() const;
+    MathParallRepr* MathRepr() const;
 };
 
 #endif // PARALLELEPIPED_H

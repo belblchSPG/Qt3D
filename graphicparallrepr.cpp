@@ -9,13 +9,11 @@ GraphicParallRepr::GraphicParallRepr(MathParallRepr* repr, Qt3DCore::QEntity* ro
     mesh->setZExtent(repr->Length());
 
     //Материал объекта
-    Qt3DExtras::QDiffuseSpecularMaterial *material = new Qt3DExtras::QDiffuseSpecularMaterial(rootEntity);
-    material->setAmbient(_color);
+    _material = std::make_unique<Qt3DExtras::QDiffuseSpecularMaterial>(rootEntity);
 
     //Расположение в пространстве и масштаб
     Qt3DCore::QTransform *transform = new Qt3DCore::QTransform(rootEntity);
-    QVector3D center = {0,0,0};
-    transform->setTranslation(center);
+    transform->setTranslation(repr->Center());
     transform->setScale(1.0);
 
     //Использовал выше операторы new, так как при добавлении компонентов я должен передавать указатели
@@ -27,12 +25,8 @@ GraphicParallRepr::GraphicParallRepr(MathParallRepr* repr, Qt3DCore::QEntity* ro
     //Передаю указатель на корневую сущность. Корневой сущностью будет являться указатель на сцену.
     Qt3DCore::QEntity *parallelepipedEntity = new Qt3DCore::QEntity(rootEntity);
     parallelepipedEntity->addComponent(mesh);
-    parallelepipedEntity->addComponent(material);
+    parallelepipedEntity->addComponent(_material.get());
     parallelepipedEntity->addComponent(transform);
 }
 
-GraphicParallRepr::~GraphicParallRepr()
-{
-
-}
 

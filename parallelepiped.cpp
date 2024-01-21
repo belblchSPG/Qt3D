@@ -1,6 +1,7 @@
 #include "parallelepiped.h"
 
-Parallelepiped::Parallelepiped(float width, float height, float length, QVector3D center, Qt3DCore::QEntity* rootEntity)
+
+Parallelepiped::Parallelepiped(float width, float height, float length, QVector3D center, Qt3DCore::QEntity *rootEntity)
 {
     try
     {
@@ -10,8 +11,8 @@ Parallelepiped::Parallelepiped(float width, float height, float length, QVector3
         }
         else
         {
-            _parallMath =  new MathParallRepr(width, height, length, center);
-            _parallGraphic = new GraphicParallRepr(_parallMath, rootEntity);
+            _parallMath = std::make_unique<MathParallRepr>(width, height, length, center);
+            _parallGraphic = std::make_unique<GraphicParallRepr>(_parallMath.get(), rootEntity);
         }
     }
     catch (const std::invalid_argument& e)
@@ -19,4 +20,14 @@ Parallelepiped::Parallelepiped(float width, float height, float length, QVector3
         // Обработка ошибки
         qDebug() << "Error while creating parallelepiped:" << e.what();
     }
+}
+
+GraphicParallRepr* Parallelepiped::GraphicsRepr() const
+{
+    return _parallGraphic.get();
+}
+
+MathParallRepr* Parallelepiped::MathRepr() const
+{
+    return _parallMath.get();
 }

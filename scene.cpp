@@ -60,38 +60,6 @@ void Scene::GenerateCuboidByLWHC(QVector<QVector<QLineEdit *>> vector)
 
 void Scene::CollisionDetection()
 {
-<<<<<<< HEAD
-   //qDebug() << "Collision detection started!";
-
-   //// Перебираем все кубоиды на сцене
-   //for (Parallelepiped* c1 : _sceneObjects)
-   //{
-   //    // Перебираем остальные кубоиды для проверки пересечения
-   //    for (Parallelepiped* c2 : _sceneObjects)
-    //    {
-    //        // Исключаем сравнение кубоидов с собой
-    //        if (c1 != c2)
-    //        {
-    //            qDebug() << "Check " << c1 << "and " << c2;
-    //            // Проверка на пересечение
-    //            if (CheckCollision(c1, c2))
-    //            {
-    //                qDebug() << "Colors changed red!";
-    //                c1->SetColor(Qt::red);
-    //                c2->SetColor(Qt::red);
-    //            }
-    //            else
-    //            {
-    //                qDebug() << "Colors changed green!";
-    //                if(c1->getColor()!=Qt::red)
-    //                {
-    //                   c1->SetColor(Qt::green);
-    //                }
-    //                if(c2->getColor()!=Qt::red)
-    //                {
-    //                   c2->SetColor(Qt::green);
-    //                }
-=======
     qDebug() << "Collision detection started";
 
     // Перебираем все кубоиды на сцене
@@ -107,86 +75,39 @@ void Scene::CollisionDetection()
                 // Проверка на пересечение
                 if (CheckCollision(c1, c2))
                 {
-                    c1->SetColor(Qt::red);
-                    c2->SetColor(Qt::red);
+
+                    c1->GraphicsRepr()->setColor(Qt::red);
+                    c2->GraphicsRepr()->setColor(Qt::red);
                 }
                 else
                 {
-                    if(c1->getColor()!=Qt::red)
+                    if(c1->GraphicsRepr()->Color()!=Qt::red)
                     {
-                       c1->SetColor(Qt::green);
+                       c1->GraphicsRepr()->setColor(Qt::green);
                     }
-                    if(c2->getColor()!=Qt::red)
+                    if(c2->GraphicsRepr()->Color()!=Qt::red)
                     {
-                       c2->SetColor(Qt::green);
+                       c2->GraphicsRepr()->setColor(Qt::green);
                     }
->>>>>>> 12abc876a260a9cf05f6ec86bf3ab11011780787
-
-    //            }
-    //        }
-    //    }`
-    //}
+                }
+            }
+        }
+    }
 }
 
 bool Scene::CheckCollision(Parallelepiped* p1, Parallelepiped* p2)
 {
-
     // Проекции по осям
-    ////bool overlapX = (p1->Center().x() - p1->Width()/2) <= (p2->Center().x() + p2->Width()/2) &&
-    ////                (p1->Center().x() + p1->Width()/2) >= (p2->Center().x() - p2->Width()/2);
+    bool overlapX = (p1->MathRepr()->Center().x() - p1->MathRepr()->Width()/2) <= (p2->MathRepr()->Center().x() + p2->MathRepr()->Width()/2) &&
+                    (p1->MathRepr()->Center().x() + p1->MathRepr()->Width()/2) >= (p2->MathRepr()->Center().x() - p2->MathRepr()->Width()/2);
 
-    ////bool overlapY = (p1->Center().y() - p1->Height()/2) <= (p2->Center().y() + p2->Height()/2) &&
-    ////                (p1->Center().y() + p1->Height()/2) >= (p2->Center().y() - p2->Height()/2);
+    bool overlapY = (p1->MathRepr()->Center().y() - p1->MathRepr()->Height()/2) <= (p2->MathRepr()->Center().y() + p2->MathRepr()->Height()/2) &&
+                    (p1->MathRepr()->Center().y() + p1->MathRepr()->Height()/2) >= (p2->MathRepr()->Center().y() - p2->MathRepr()->Height()/2);
 
-    ////bool overlapZ = (p1->Center().z() - p1->Length()/2) <= (p2->Center().z() + p2->Length()/2) &&
-    ////                (p1->Center().z() + p1->Length()/2) >= (p2->Center().z() - p2->Length()/2);
+    bool overlapZ = (p1->MathRepr()->Center().z() - p1->MathRepr()->Length()/2) <= (p2->MathRepr()->Center().z() + p2->MathRepr()->Length()/2) &&
+                    (p1->MathRepr()->Center().z() + p1->MathRepr()->Length()/2) >= (p2->MathRepr()->Center().z() - p2->MathRepr()->Length()/2);
 
-<<<<<<< HEAD
-
-   //// Проверка наличия общих вершин
-   //bool commonVertices = (p1->Center() == p2->Center() + QVector3D(p2->Width()/2, p2->Height()/2, p2->Length()/2)) ||
-   //                      (p2->Center() == p1->Center() + QVector3D(p1->Width()/2, p1->Height()/2, p1->Length()/2));
-
-   //// Проверка одного параллелепипеда внутри другого
-   //bool insideCheck = (p1->Center().x() - p1->Width()/2 >= p2->Center().x() - p2->Width()/2) &&
-   //                   (p1->Center().x() + p1->Width()/2 <= p2->Center().x() + p2->Width()/2) &&
-   //                   (p1->Center().y() - p1->Height()/2 >= p2->Center().y() - p2->Height()/2) &&
-   //                   (p1->Center().y() + p1->Height()/2 <= p2->Center().y() + p2->Height()/2) &&
-   //                   (p1->Center().z() - p1->Length()/2 >= p2->Center().z() - p2->Length()/2) &&
-   //                   (p1->Center().z() + p1->Length()/2 <= p2->Center().z() + p2->Length()/2);
-
-    //if(overlapX)
-    //{
-    //    qDebug() << "X";
-    //}
-    //if(overlapY)
-    //{
-    //    qDebug() << "Y";
-    //}
-    //if(overlapZ)
-    //{
-    //    qDebug() << "Z";
-    //}
-
-
-    //// Ваши дальнейшие действия в зависимости от результата проверок
-    //if (overlapX && overlapY && overlapZ) {
-    //    return true;
-    //}
-    //if(commonVertices)
-    //{
-    //    return true;
-    //}
-    //if(insideCheck)
-    //{
-    //    return true;
-    //}
-=======
-    if (overlapX && overlapY && overlapZ) {
-        return true;
-    }
->>>>>>> 12abc876a260a9cf05f6ec86bf3ab11011780787
-    return false;
+    return overlapX && overlapY && overlapZ;
 }
 
 Qt3DExtras::Qt3DWindow *Scene::createMainWindow(QWidget *parent)

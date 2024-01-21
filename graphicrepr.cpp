@@ -1,13 +1,11 @@
 #include "graphicrepr.h"
 
-GraphicRepr::GraphicRepr(){}
-
-QColor GraphicRepr::Color()
+QColor GraphicRepr::Color() const
 {
-    return _color;
+    return _material->ambient();
 }
 
 void GraphicRepr::setColor(QColor color)
 {
-    _color = color;
+    _material->setAmbient(color);
 }

@@ -1,3 +1,6 @@
 #include "mathrepr.h"
 
-MathRepr::MathRepr() {}
+QVector3D MathRepr::Center() const
+{
+    return _center;
+}

@@ -10,9 +10,9 @@ class MathParallRepr : public MathRepr
 public:
     MathParallRepr(float, float, float, QVector3D);
 
-    float Width();
-    float Height();
-    float Length();
+    float Width() const;
+    float Height() const;
+    float Length() const;
 
 private:
     float _width;

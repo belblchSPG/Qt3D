@@ -15,14 +15,11 @@
 
 #define RUN_ICON_PATH "D:/Coding/Qt/Qt3D-Test/Icons/arrow-39-16.png"
 
-
 class Scene: public QWidget
 {
-
 private:
     Qt3DCore::QEntity *_rootEntity;
     QWidget *container;
-    QVector<Qt3DCore::QEntity*> _Entities;
     QVector<Parallelepiped* > _sceneObjects;
 
 public:
