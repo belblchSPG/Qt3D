@@ -16,18 +16,18 @@ class InputWindowLWHC : public QDialog
 
 public:
     InputWindowLWHC(QWidget *parent = nullptr);
+    QVector<QVector<QLineEdit*>> getResult(){return _result;}
 
 signals:
 
-    void resultReady(QVector<QVector<QLineEdit *>>);
-
+    void resultReady(QVector<QVector<QLineEdit*>>);
 protected:
 
     void accept() override;
 
 private:
 
-    QVector<QVector<QLineEdit *>> _result;
+    QVector<QVector<QLineEdit*>> _result;
     void createWindow();
 };
 

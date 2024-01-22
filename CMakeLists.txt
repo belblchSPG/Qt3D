@@ -14,9 +14,6 @@ find_package(Qt6 REQUIRED COMPONENTS Widgets 3DCore 3DExtras 3DLogic 3DInput 3DR
 
 set(PROJECT_SOURCES
         main.cpp
-
-
-
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -30,16 +27,21 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         inputwindowlwhc.h inputwindowlwhc.cpp
         parallelepiped.h parallelepiped.cpp
 
-        Icons/arrow-39-16.png
-        C:/Users/User/Downloads/arrow-39-16.png
+        #Icons/arrow-39-16.png
+        #C:/Users/User/Downloads/arrow-39-16.png
 
 
 
-        object.h object.cpp
+
         mathrepr.h mathrepr.cpp
         mathparallrepr.h mathparallrepr.cpp
         graphicrepr.h graphicrepr.cpp
         graphicparallrepr.h graphicparallrepr.cpp
+        cameracontroller.h cameracontroller.cpp
+        collisiondetector.h collisiondetector.cpp
+        objectmanager.h objectmanager.cpp
+        windowsmanager.h windowsmanager.cpp
+        object.h object.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET Qt3D-Test APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
