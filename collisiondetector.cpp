@@ -2,42 +2,37 @@
 
 CollisionDetector::CollisionDetector() {}
 
-void CollisionDetector::CollisionDetection(std::vector<Parallelepiped*> objects)
+void CollisionDetector::CollisionDetection(const std::vector<Parallelepiped*>& objects)
 {
-    qDebug() << "Collision detection started";
+   qDebug() << "Collision detection started";
 
-    // Перебираем все кубоиды на сцене
-    for (Parallelepiped* c1 : objects)
-    {
-        // Перебираем остальные кубоиды для проверки пересечения
-        for (Parallelepiped* c2 : objects)
-        {
-            // Исключаем сравнение кубоидов с собой
-            if (c1 != c2)
-            {
-                qDebug() << "Check " << c1 << "and " << c2;
-                // Проверка на пересечение
-                if (CheckCollision(c1, c2))
-                {
+   for (size_t i = 0; i < objects.size(); ++i)
+   {
+       for (size_t j = i + 1; j < objects.size(); ++j)
+       {
+           Parallelepiped* c1 = objects[i];
+           Parallelepiped* c2 = objects[j];
+           qDebug() << "Check " << c1 << "and " << c2;
+           if (CheckCollision(c1, c2))
+           {
 
-                    c1->GraphicsRepr()->setColor(Qt::red);
-                    c2->GraphicsRepr()->setColor(Qt::red);
-                }
-                else
-                {
-                    if(c1->GraphicsRepr()->Color()!=Qt::red)
-                    {
-                        c1->GraphicsRepr()->setColor(Qt::green);
-                    }
-                    if(c2->GraphicsRepr()->Color()!=Qt::red)
-                    {
-                        c2->GraphicsRepr()->setColor(Qt::green);
-                    }
-                }
-            }
-        }
-    }
-}
+               c1->GraphicsRepr()->setColor(Qt::red);
+               c2->GraphicsRepr()->setColor(Qt::red);
+           }
+           else
+           {
+               if(c1->GraphicsRepr()->Color()!=Qt::red)
+               {
+                   c1->GraphicsRepr()->setColor(Qt::green);
+               }
+               if(c2->GraphicsRepr()->Color()!=Qt::red)
+               {
+                   c2->GraphicsRepr()->setColor(Qt::green);
+               }
+           }
+       }
+       }
+   }
 
 bool CollisionDetector::CheckCollision(Parallelepiped *p1, Parallelepiped *p2) const
 {

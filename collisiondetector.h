@@ -10,7 +10,7 @@ class CollisionDetector
 {
 public:
     CollisionDetector();
-    void CollisionDetection(std::vector<Parallelepiped*>);
+    void CollisionDetection(const std::vector<Parallelepiped*>&);
 
 private:
     bool CheckCollision(Parallelepiped*,Parallelepiped*) const;
