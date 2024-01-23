@@ -22,9 +22,7 @@ Scene::Scene(QWidget *parent)
 // Вызываю данный метод для генерации кастомного окна для ввода данных
 void Scene::Window_GenerateCuboidByLWHC()
 {
-    InputWindowLWHC *window = new InputWindowLWHC(this);
-
-    qDebug() << "Created window ";
+    InputWindowLWHC* window = _windowManager.GenerateCuboidByLWHCWindow(this);
 
     // Когда из окна приходит сигнал resultReady на сцене вызывается метод GenerateCuboidByLWHC
     // Сигнал передает результаты в GenerateCuboidByLWHC
@@ -50,7 +48,7 @@ Qt3DExtras::Qt3DWindow *Scene::createMainScene(QWidget *parent)
     QToolButton *tRunButton = new QToolButton(this);
     QToolButton *tGenerateButton = new QToolButton(this);
     //tRunButton->setText("Run Algorithm");
-    tRunButton->setIcon(QIcon(RUN_ICON_PATH));
+    //tRunButton->setIcon(QIcon(RUN_ICON_PATH));
     tGenerateButton->setText("Generate Cuboid");
     //--------------------------------------------------------------------//
 
@@ -72,7 +70,8 @@ Qt3DExtras::Qt3DWindow *Scene::createMainScene(QWidget *parent)
 
 
     //---------------------------Open input window for generation action--------------------------//
-    connect (generate4LWHCAction, &QAction::triggered, this, &Scene::Window_GenerateCuboidByLWHC);
+    connect (generate4LWHCAction, &QAction::triggered, this, Window_GenerateCuboidByLWHC);
+
     connect(tRunButton, &QToolButton::clicked, this, [=]() {
         CollisionDetector collisionDetector;
         collisionDetector.CollisionDetection(_objectManager.Objects());

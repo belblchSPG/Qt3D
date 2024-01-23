@@ -7,6 +7,7 @@
 #include "cameracontroller.h"
 #include "objectmanager.h"
 #include "collisiondetector.h"
+#include "windowsmanager.h"
 
 #include <Qt3DExtras>
 #include <Qt3DCore>
@@ -23,6 +24,8 @@ private:
 
     std::unique_ptr<Qt3DCore::QEntity> _rootEntity;
     ObjectManager _objectManager;
+    WindowsManager _windowManager;
+
     QWidget *container;
 
 public:
