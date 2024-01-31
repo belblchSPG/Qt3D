@@ -18,18 +18,12 @@ class AppWindow : public QMainWindow
 public:
     explicit AppWindow(QWidget *parent = nullptr);
     void recieveFileName(const QString& path);
-
-    void UpdateSceneObserver(Parallelepiped *object);
-
 private:
     QToolBar *_bar;
     Scene *_scene;
 
     QToolBar *generateSceneObserver();
     QMenuBar *generateMenuBar();
-
-    void UpdateSceneObserver();
-
 public slots:
     void handleObjectAddedInAppWindow(Parallelepiped *object);
 };

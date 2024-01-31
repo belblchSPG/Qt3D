@@ -18,7 +18,7 @@ public:
 
 private:
     //Используется указатель, так как удаление может вызваться в любой момент времени
-    std::unique_ptr<Qt3DCore::QEntity> parallelepipedEntity;
+    std::unique_ptr<Qt3DCore::QEntity> _parallelepipedEntity;
     //Используется указатель, так как цвет часто меняется во время пользования приложением
     std::unique_ptr<Qt3DExtras::QDiffuseSpecularMaterial> _material;
 };

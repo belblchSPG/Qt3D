@@ -26,8 +26,6 @@ public:
 
     QVector3D RotationVector(QVector3D, QQuaternion);
     std::vector<QVector3D> GetAxis(std::vector<QVector3D>,std::vector<QVector3D>);
-
-
 private:
     QVector3D _center;
     float _width;
