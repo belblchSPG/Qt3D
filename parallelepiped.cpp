@@ -1,7 +1,6 @@
 #include "parallelepiped.h"
 
-
-Parallelepiped::Parallelepiped(float width, float height, float length, QVector3D center, Qt3DCore::QEntity *rootEntity)
+Parallelepiped::Parallelepiped(float width, float height, float length, QVector3D center,float xRot,float yRot,float zRot, Qt3DCore::QEntity *rootEntity)
 {
     try
     {
@@ -11,8 +10,8 @@ Parallelepiped::Parallelepiped(float width, float height, float length, QVector3
         }
         else
         {
-            _parallMath = std::make_unique<MathParallRepr>(width, height, length, center);
-            _parallGraphic = std::make_unique<GraphicParallRepr>(_parallMath.get(), rootEntity);
+            _parallMath = std::make_unique<MathRepresentation>(width, height, length, center,xRot,yRot,zRot);
+            _parallGraphic = std::make_unique<GraphicRepresentation>(_parallMath.get(), rootEntity);
         }
     }
     catch (const std::invalid_argument& e)
@@ -22,12 +21,6 @@ Parallelepiped::Parallelepiped(float width, float height, float length, QVector3
     }
 }
 
-GraphicParallRepr* Parallelepiped::GraphicsRepr() const
-{
-    return _parallGraphic.get();
-}
+GraphicRepresentation *Parallelepiped::GraphicsRepr() const { return _parallGraphic.get(); }
 
-MathParallRepr* Parallelepiped::MathRepr() const
-{
-    return _parallMath.get();
-}
+MathRepresentation *Parallelepiped::MathRepr() const { return _parallMath.get(); }

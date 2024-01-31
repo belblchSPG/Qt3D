@@ -2,7 +2,9 @@
 
 WindowsManager::WindowsManager() {}
 
-InputWindowLWHC* WindowsManager::GenerateCuboidByLWHCWindow(QWidget* scene)
+InputWindowLWHC* WindowsManager::GenerateCuboidByLWHCWindow(QWidget* widget)
 {
-    return new InputWindowLWHC(scene);
+    return new InputWindowLWHC(widget);
 }
+
+

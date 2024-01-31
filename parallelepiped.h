@@ -1,26 +1,25 @@
 #ifndef PARALLELEPIPED_H
 #define PARALLELEPIPED_H
 
-#include "object.h"
-#include "graphicparallrepr.h"
-#include "mathparallrepr.h"
+#include "mathrepresentation.h"
+#include "graphicrepresentation.h"
 
 #include <stdexcept>
 #include <memory>
 
 //Класс, который отвечает за представление параллелепипеда на сцене.
 //В нем хранится раздельное представление математики и графики объекта
-class Parallelepiped : public Object
+class Parallelepiped
 {
 private:
-    std::unique_ptr<MathParallRepr> _parallMath;
-    std::unique_ptr<GraphicParallRepr> _parallGraphic;
+    std::unique_ptr<MathRepresentation> _parallMath;
+    std::unique_ptr<GraphicRepresentation> _parallGraphic;
 
 public:
-    Parallelepiped(float, float, float, QVector3D, Qt3DCore::QEntity*);
 
-    GraphicParallRepr* GraphicsRepr() const;
-    MathParallRepr* MathRepr() const;
+    GraphicRepresentation *GraphicsRepr() const;
+    MathRepresentation *MathRepr() const;
+    Parallelepiped(float width, float height, float length, QVector3D center, float xRot, float yRot, float zRot, Qt3DCore::QEntity *rootEntity);
 };
 
 #endif // PARALLELEPIPED_H

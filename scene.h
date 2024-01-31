@@ -12,36 +12,47 @@
 #include <Qt3DExtras>
 #include <Qt3DCore>
 #include <Qt3DRender>
-#include <QMenu>
-#include <QToolBar>
-#include <QToolButton>
 #include <memory>
+#include <QBuffer>
+#include <QGraphicsOpacityEffect>
+#include <vector>
 
-//Класс, который хранит в себе графическое отображение приложения
+//Класс, который хранит в себе сцену для отображения объектов
 class Scene: public QWidget
 {
+    Q_OBJECT
 private:
 
     std::unique_ptr<Qt3DCore::QEntity> _rootEntity;
-    ObjectManager _objectManager;
-    WindowsManager _windowManager;
 
-    QWidget *container;
+    ObjectManager* _objectManager;
+
+    Qt3DExtras::Qt3DWindow* _view;
 
 public:
-    explicit Scene(QWidget *parent = nullptr);
+    Scene(QWidget *parent = nullptr);
 
-    void Window_GenerateCuboidByLWHC();
+    Qt3DExtras::Qt3DWindow* getView(){return _view;}
 
-    Qt3DExtras::Qt3DWindow* createMainScene(QWidget *parent);
-protected:
+    void OpenScene(const QString& path);
 
-    void
-    resizeEvent ( QResizeEvent * event );
+    Qt3DCore::QEntity *createTransformedPlane(Qt3DCore::QEntity *parent, QVector3D p0, QVector3D p1, QVector3D p3, QColor color);
+
+    void deleteObject(Parallelepiped *object);
+
+    void selectObject(Parallelepiped *object);
+
+    void unselectObject(Parallelepiped *object);
+
+    std::vector<Parallelepiped*> Objects();
+
+    void showCollisions(std::vector<std::tuple<Parallelepiped*,Parallelepiped*,IntersectionType>>);
+
+signals:
+    void objectAddedToAppWindow(Parallelepiped *object);
 
 public slots:
-    void
-    resizeView(QSize size);
+    void objectAdded(Parallelepiped *object);
 };
 
 #endif // SCENE_H

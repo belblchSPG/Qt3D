@@ -10,8 +10,6 @@ class GraphicRepr
 {
 public:
 
-    QColor Color() const;
-    void setColor(QColor);
 
 protected:
     std::unique_ptr<Qt3DExtras::QDiffuseSpecularMaterial> _material;

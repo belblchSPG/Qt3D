@@ -20,8 +20,6 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(Qt3D-Test
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
-
-
         scene.h scene.cpp
 
         inputwindowlwhc.h inputwindowlwhc.cpp
@@ -30,19 +28,17 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         #Icons/arrow-39-16.png
         #C:/Users/User/Downloads/arrow-39-16.png
 
-
-
-
-        mathrepr.h mathrepr.cpp
-        mathparallrepr.h mathparallrepr.cpp
-        graphicrepr.h graphicrepr.cpp
-        graphicparallrepr.h graphicparallrepr.cpp
         cameracontroller.h cameracontroller.cpp
         collisiondetector.h collisiondetector.cpp
         objectmanager.h objectmanager.cpp
         windowsmanager.h windowsmanager.cpp
-        object.h object.cpp
-    )
+
+        graphicrepresentation.h graphicrepresentation.cpp
+        mathrepresentation.h mathrepresentation.cpp
+        appwindow.h appwindow.cpp
+
+        parser.h parser.cpp
+)
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET Qt3D-Test APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
 #                 ${CMAKE_CURRENT_SOURCE_DIR}/android)

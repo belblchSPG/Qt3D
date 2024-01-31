@@ -10,6 +10,8 @@
 #include <QLocale>
 #include <QDebug>
 
+
+//Пока не используется, убрал возвожность вписывать координаты
 class InputWindowLWHC : public QDialog
 {
     Q_OBJECT

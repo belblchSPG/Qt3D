@@ -10,7 +10,7 @@
 class GraphicParallRepr : public GraphicRepr
 {
 public:
-    GraphicParallRepr(MathParallRepr*, Qt3DCore::QEntity*);
+    GraphicParallRepr();
 };
 
 #endif // GRAPHICPARALLREPR_H
