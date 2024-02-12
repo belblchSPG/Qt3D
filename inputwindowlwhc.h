@@ -1,14 +1,7 @@
 #ifndef INPUTWINDOWLWHC_H
 #define INPUTWINDOWLWHC_H
 
-#include <QDialog>
-#include <QGridLayout>
-#include <QLabel>
-#include <QLineEdit>
-#include <QDialogButtonBox>
-#include <QDoubleValidator>
-#include <QLocale>
-#include <QDebug>
+
 
 
 //Пока не используется, убрал возвожность вписывать координаты

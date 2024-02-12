@@ -1,15 +1,12 @@
 #ifndef APPWINDOW_H
 #define APPWINDOW_H
 
+#include "GA.h"
 #include "windowsmanager.h"
-#include "scene.h"
+#include "gascene.h"
 #include "menubar.h"
 #include "sceneobserver.h"
 
-#include <memory>
-
-#include <QMainWindow>
-#include <QToolBar>
 
 //Класс отвечает за отображение приложения
 class AppWindow : public QMainWindow
@@ -20,12 +17,12 @@ public:
     void recieveFileName(const QString& path);
 private:
     QToolBar *_bar;
-    Scene *_scene;
+    GA::GAScene *_scene;
 
     QToolBar *generateSceneObserver();
     QMenuBar *generateMenuBar();
 public slots:
-    void handleObjectAddedInAppWindow(Parallelepiped *object);
+    void handleObjectAddedInAppWindow(GA::GACube *object);
 };
 
 #endif // APPWINDOW_H

@@ -20,10 +20,10 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(Qt3D-Test
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
-        scene.h scene.cpp
+        gascene.h gascene.cpp
 
-        inputwindowlwhc.h inputwindowlwhc.cpp
-        parallelepiped.h parallelepiped.cpp
+
+        gacube.h gacube.cpp
 
         #Icons/arrow-39-16.png
         #C:/Users/User/Downloads/arrow-39-16.png
@@ -31,13 +31,15 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         cameracontroller.h cameracontroller.cpp
         collisiondetector.h collisiondetector.cpp
         objectmanager.h objectmanager.cpp
-        windowsmanager.h windowsmanager.cpp
 
-        graphicrepresentation.h graphicrepresentation.cpp
-        mathrepresentation.h mathrepresentation.cpp
+
+        gacubegraphicrepresentation.h gacubegraphicrepresentation.cpp
+        gacubemathrepresentation.h gacubemathrepresentation.cpp
         appwindow.h appwindow.cpp
 
         parser.h parser.cpp
+        GA.h
+        tst_gacube.cpp
 )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET Qt3D-Test APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
@@ -64,6 +66,7 @@ target_link_libraries(Qt3D-Test PRIVATE
     Qt${QT_VERSION_MAJOR}::3DCore
     Qt${QT_VERSION_MAJOR}::3DInput
     Qt${QT_VERSION_MAJOR}::3DRender
+    GTest::GTest
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
@@ -90,5 +93,35 @@ install(TARGETS Qt3D-Test
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(Qt3D-Test)
 endif()
+
+enable_testing()
+
+
+if ($ENV{GOOGLETEST_DIR})
+    get_filename_component(_GTEST_BASE $ENV{GOOGLETEST_DIR} REALPATH)
+elseif (EXISTS "") # set by QC
+    get_filename_component(_GTEST_BASE "" REALPATH) # set by QC
+endif()
+
+if (NOT GTEST_ROOT)
+    if (_GTEST_BASE)
+        message("Setting GTEST_ROOT to ${_GTEST_BASE}")
+        set(GTEST_ROOT ${_GTEST_BASE})
+    else()
+        message("No GTEST_ROOT specified - using system defaults.")
+    endif()
+endif()
+
+find_package(GTest REQUIRED)
+if (NOT GTest_FOUND)
+    message (FATAL_ERROR "No GTest Found")
+endif()
+#
+#add_test(NAME GaCubeConstructor COMMAND GaCubeConstructor)
+#
+#if (GMock_FOUND)
+#    target_link_libraries(GaCubeConstructor INTERFACE GTest::GMock)
+#endif()
+
 
 

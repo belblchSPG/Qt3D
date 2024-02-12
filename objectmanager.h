@@ -1,15 +1,13 @@
 #ifndef OBJECTMANAGER_H
 #define OBJECTMANAGER_H
 
-#include "parallelepiped.h"
+#include "ga.h"
+#include "gacube.h"
 #include "parser.h"
 #include "collisiondetector.h"
 
-#include <vector>
-#include <tuple>
-#include <algorithm>
-#include <QLineEdit>
-#include <QObject>
+
+namespace GA{
 
 //Класс, который будет отвечать за генерирование объектов на сцене
 //и который будет хранить в себе все объекты
@@ -23,27 +21,28 @@ public:
 
     //void GenerateCuboidByLWHC(QVector<QVector<QLineEdit*>>);
 
-    std::vector<Parallelepiped*> Objects() const;
+    std::vector<GA::GACube*> Objects() const;
 
     void GenerateObjectsFromFile(const QString& path);
 
-    void deleteObject(Parallelepiped *object);
+    void deleteObject(GA::GACube *object);
 
-    void selectObject(Parallelepiped *object);
+    void selectObject(GA::GACube *object);
 
-    void unselectObject(Parallelepiped *object);
+    void unselectObject(GA::GACube *object);
 
-    void showCollisions(std::vector<std::tuple<Parallelepiped*,Parallelepiped*,IntersectionType>>);
+    void showCollisions(std::vector<std::tuple<GA::GACube*,GA::GACube*,GA::IntersectionType>>);
 
 signals:
 
-    void objectAdded(Parallelepiped *object);
+    void objectAdded(GA::GACube *object);
 
 private:
 
     Qt3DCore::QEntity* _rootEntity;
 
-    std::vector<Parallelepiped*> _objects;
+    std::vector<GA::GACube*> _objects;
 };
 
+}
 #endif // OBJECTMANAGER_H

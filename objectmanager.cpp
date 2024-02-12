@@ -1,11 +1,11 @@
 #include "objectmanager.h"
 
-ObjectManager::ObjectManager()
+GA::ObjectManager::ObjectManager()
 {
 
 }
 
-ObjectManager::ObjectManager(Qt3DCore::QEntity * rootEntity)
+GA::ObjectManager::ObjectManager(Qt3DCore::QEntity * rootEntity)
 {
     _rootEntity = rootEntity;
 }
@@ -25,29 +25,35 @@ ObjectManager::ObjectManager(Qt3DCore::QEntity * rootEntity)
 //    emit objectAdded(object);
 //}
 
-std::vector<Parallelepiped*> ObjectManager::Objects() const
+std::vector<GA::GACube*> GA::ObjectManager::Objects() const
 {
     return _objects;
 }
 
-void ObjectManager::GenerateObjectsFromFile(const QString &path)
+void GA::ObjectManager::GenerateObjectsFromFile(const QString &path)
 {
     Parser parser;
-    std::vector<MathRepresentation> objectsToGenerate = parser.getInfo(path);
-    for(auto a : objectsToGenerate)
-    {
-        qDebug() << a.Center() << a.Height() << a.Length() << a.Width() << a.XRot() << a.YRot() << a.ZRot();
-        Parallelepiped *object = new Parallelepiped(a.Width(),a.Height(),a.Length(),a.Center(), a.XRot(),a.YRot(),a.ZRot(), _rootEntity);
-        _objects.push_back(object);
-        qDebug() << "Created : " << object;
 
+    std::vector<GA::GACubeMathRepresentation> objectsToGenerate = parser.getInfo(path);
+
+    for(const GA::GACubeMathRepresentation& a : objectsToGenerate)
+    {
+        GA::Vector3D mathInfo[3];
+
+        mathInfo[0] = GA::Size(a.Width(),a.Height(),a.Length());
+        mathInfo[1] = a.Center();
+        mathInfo[2] = GA::Rotation(a.XRot(),a.YRot(),a.ZRot());
+
+        GA::GACubeMathRepresentation math(mathInfo);
+
+        GA::GACube *object = new GA::GACube(math);
+        _objects.push_back(object);
         emit objectAdded(object);
     }
 }
 
-void ObjectManager::deleteObject(Parallelepiped *object)
+void GA::ObjectManager::deleteObject(GA::GACube *object)
 {
-    qDebug() << "Deleting : " << object;
 
     // Удаление объекта из вектора
     auto it = std::remove(_objects.begin(), _objects.end(), object);
@@ -57,23 +63,23 @@ void ObjectManager::deleteObject(Parallelepiped *object)
     delete object;
 }
 
-void ObjectManager::selectObject(Parallelepiped *object)
+void GA::ObjectManager::selectObject(GA::GACube *object)
 {
-    object->GraphicsRepr()->setColor(Qt::green);
+    object->getGraphicsRepresentation().setColor(Qt::green);
 }
 
-void ObjectManager::unselectObject(Parallelepiped *object)
+void GA::ObjectManager::unselectObject(GA::GACube *object)
 {
-    object->GraphicsRepr()->setColor(Qt::gray);
+    object->getGraphicsRepresentation().setColor(Qt::gray);
 }
 
-bool compareByIntersectionType(const std::tuple<Parallelepiped*, Parallelepiped*, IntersectionType>& a,
-                               const std::tuple<Parallelepiped*, Parallelepiped*, IntersectionType>& b)
+bool compareByIntersectionType(const std::tuple<GA::GACube*, GA::GACube*, GA::IntersectionType>& a,
+                               const std::tuple<GA::GACube*, GA::GACube*, GA::IntersectionType>& b)
 {
     return std::get<2>(a) < std::get<2>(b);
 }
 
-void ObjectManager::showCollisions(std::vector<std::tuple<Parallelepiped *, Parallelepiped *, IntersectionType>> collisions)
+void GA::ObjectManager::showCollisions(std::vector<std::tuple<GA::GACube *, GA::GACube *, GA::IntersectionType>> collisions)
 {
 
     std::sort(collisions.begin(), collisions.end(), compareByIntersectionType);
@@ -87,33 +93,33 @@ void ObjectManager::showCollisions(std::vector<std::tuple<Parallelepiped *, Para
     {
         if(std::get<1>(collisions.at(i)) == nullptr)
         {
-            std::get<0>(collisions.at(i))->GraphicsRepr()->setColor(Qt::yellow);
+            std::get<0>(collisions.at(i))->getGraphicsRepresentation().setColor(Qt::yellow);
             continue;
         }
         switch(std::get<2>(collisions.at(i)))
         {
             case IntersectionType::FullIntersection:
             {
-                std::get<0>(collisions.at(i))->GraphicsRepr()->setColor(Qt::blue);
-                std::get<1>(collisions.at(i))->GraphicsRepr()->setColor(Qt::blue);
+                std::get<0>(collisions.at(i))->getGraphicsRepresentation().setColor(Qt::blue);
+                std::get<1>(collisions.at(i))->getGraphicsRepresentation().setColor(Qt::blue);
                 break;
             }
             case IntersectionType::PartialIntersection:
             {
-                std::get<0>(collisions.at(i))->GraphicsRepr()->setColor(Qt::cyan);
-                std::get<1>(collisions.at(i))->GraphicsRepr()->setColor(Qt::cyan);
+                std::get<0>(collisions.at(i))->getGraphicsRepresentation().setColor(Qt::cyan);
+                std::get<1>(collisions.at(i))->getGraphicsRepresentation().setColor(Qt::cyan);
                 break;
             }
             case IntersectionType::SharedVertex:
             {
-                std::get<0>(collisions.at(i))->GraphicsRepr()->setColor(QColor(170, 130, 140));
-                std::get<1>(collisions.at(i))->GraphicsRepr()->setColor(QColor(170, 130, 140));
+                std::get<0>(collisions.at(i))->getGraphicsRepresentation().setColor(QColor(170, 130, 140));
+                std::get<1>(collisions.at(i))->getGraphicsRepresentation().setColor(QColor(170, 130, 140));
                 break;
             }
             case IntersectionType::NoIntersection:
             {
-                std::get<0>(collisions.at(i))->GraphicsRepr()->setColor(Qt::yellow);
-                std::get<1>(collisions.at(i))->GraphicsRepr()->setColor(Qt::yellow);
+                std::get<0>(collisions.at(i))->getGraphicsRepresentation().setColor(Qt::yellow);
+                std::get<1>(collisions.at(i))->getGraphicsRepresentation().setColor(Qt::yellow);
                 break;
             }
         }

@@ -3,7 +3,7 @@
 AppWindow::AppWindow(QWidget *parent)
     : QMainWindow{parent}
 {
-    _scene = new Scene(this);
+    _scene = new GA::GAScene(this);
 
     QWidget *container = createWindowContainer(_scene->getView(), this);
 
@@ -13,7 +13,7 @@ AppWindow::AppWindow(QWidget *parent)
 
     this->addToolBar(Qt::ToolBarArea::LeftToolBarArea,generateSceneObserver());
 
-    connect(_scene, &Scene::objectAddedToAppWindow, this, &AppWindow::handleObjectAddedInAppWindow);
+    connect(_scene, &GA::GAScene::objectAddedToAppWindow, this, &AppWindow::handleObjectAddedInAppWindow);
 }
 
 //Метод, который вызывается при нажатии на кнопку Open Scene в меню баре
@@ -59,14 +59,14 @@ QMenuBar *AppWindow::generateMenuBar()
     });
 
     connect(runDetectionAction, &QAction::triggered, this, [=](){
-        CollisionDetector detector;
+        GA::CollisionDetector detector;
         _scene->showCollisions(detector.CollisionDetection(_scene->Objects()));
     });
 
     return menuBar;
 }
 //Слот, который обрабатывает добавление каждого объекта на сцену и добавляет объект в обозреватель
-void AppWindow::handleObjectAddedInAppWindow(Parallelepiped* object)
+void AppWindow::handleObjectAddedInAppWindow(GA::GACube* object)
 {
     QMenuBar *objectMenuBar = new QMenuBar(this);
 

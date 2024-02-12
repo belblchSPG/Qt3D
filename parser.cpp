@@ -1,26 +1,31 @@
 #include "parser.h"
 
-Parser::Parser() {}
-
-std::vector<MathRepresentation> Parser::getInfo(const QString &path)
+std::vector<GA::GACubeMathRepresentation> GA::Parser::getInfo(const QString &path)
 {
-    std::vector<MathRepresentation> vec;
+    std::vector<GA::GACubeMathRepresentation> vec;
     std::ifstream file(path.toStdString());
     std::string line;
     std::istringstream iss(line);
     while(std::getline(file, line))
     {
-        MathRepresentation math;
+        GA::GACubeMathRepresentation math;
         parseObject(line, math);
         vec.push_back(math);
     }
     return vec;
 }
 
-void Parser::parseObject(const std::string& line, MathRepresentation& math)
+void GA::Parser::parseObject(const std::string& line, GA::GACubeMathRepresentation& math)
 {
     std::istringstream iss(line);
     float w,h,l,x,y,z, xr, yr,zr;
     iss >> w >> h >> l >> x >> y >> z >> xr >> yr >> zr;
-    math = MathRepresentation(w,h,l,QVector3D(x,y,z),xr,yr,zr);
+
+    GA::Vector3D mathInfo[3];
+
+    mathInfo[0] = GA::Size(w,h,l);
+    mathInfo[1] = GA::Point(x,y,z);
+    mathInfo[2] = GA::Rotation(xr,yr,zr);
+
+    math = GACubeMathRepresentation(mathInfo);
 }

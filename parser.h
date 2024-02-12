@@ -1,24 +1,21 @@
 #ifndef PARSER_H
 #define PARSER_H
 
-#include "mathrepresentation.h"
+#include "gacubemathrepresentation.h"
 
-#include <QString>
-#include <vector>
-#include <fstream>
-#include <sstream>
-#include <iostream>
-#include <QDebug>
+
+namespace GA
+{
 
 //Класс используется для обработки файлов, хранящих информацию о сцене
 class Parser
 {
 public:
-    Parser();
+    Parser() = default;
 
-    std::vector<MathRepresentation> getInfo(const QString& path);
+    std::vector<GACubeMathRepresentation> getInfo(const QString& path);
 private:
-    void parseObject(const std::string& line, MathRepresentation& object);
+    void parseObject(const std::string& line, GACubeMathRepresentation& object);
 };
-
+}
 #endif // PARSER_H

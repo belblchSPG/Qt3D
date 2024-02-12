@@ -1,43 +1,43 @@
 #include "collisiondetector.h"
 
-CollisionDetector::CollisionDetector() {}
+GA::CollisionDetector::CollisionDetector() {}
 
-std::vector<std::tuple<Parallelepiped*,Parallelepiped*,IntersectionType>> CollisionDetector::CollisionDetection(const std::vector<Parallelepiped*>& objects)
+std::vector<std::tuple<GA::GACube*,GA::GACube*,GA::IntersectionType>> GA::CollisionDetector::CollisionDetection(const std::vector<GA::GACube*>& objects)
 {
    //qDebug() << "Collision detection started";
 
-   std::vector<std::tuple<Parallelepiped*,Parallelepiped*,IntersectionType>> collisions;
+   std::vector<std::tuple<GA::GACube*,GA::GACube*,IntersectionType>> collisions;
 
    if(objects.size() == 1)
    {
-       collisions.push_back(std::tuple<Parallelepiped*,Parallelepiped*,IntersectionType>(objects[0],nullptr,IntersectionType::NoIntersection));
+       collisions.push_back(std::tuple<GA::GACube*,GA::GACube*,IntersectionType>(objects[0],nullptr,GA::IntersectionType::NoIntersection));
    }
 
    for (size_t i = 0; i < objects.size(); ++i)
    {
        for (size_t j = i + 1; j < objects.size(); ++j)
        {
-           Parallelepiped* c1 = objects[i];
-           Parallelepiped* c2 = objects[j];
+           GA::GACube* c1 = objects[i];
+           GA::GACube* c2 = objects[j];
            //qDebug() << "Check " << c1 << "and " << c2;
 
-           collisions.push_back(std::tuple<Parallelepiped*,Parallelepiped*,IntersectionType>(c1,c2,Collision(c1,c2)));
+          // collisions.push_back(std::tuple<GA::GACube*,GA::GACube*,GA::IntersectionType>(c1,c2,Collision(c1,c2)));
        }
     }
    return collisions;
 }
-bool SharedVertexesDetection(Parallelepiped *p1, Parallelepiped *p2)
+bool SharedVertexesDetection(GA::GACube *p1, GA::GACube *p2)
 {
-    QVector3D center1 = p1->MathRepr()->Center();
-    QVector3D center2 = p2->MathRepr()->Center();
+    QVector3D center1 = p1->getMathRepresentation().Center();
+    QVector3D center2 = p2->getMathRepresentation().Center();
 
-    float halfWidth1 = p1->MathRepr()->Width() / 2.0f;
-    float halfHeight1 = p1->MathRepr()->Height() / 2.0f;
-    float halfLength1 = p1->MathRepr()->Length() / 2.0f;
+    float halfWidth1 = p1->getMathRepresentation().Width() / 2.0f;
+    float halfHeight1 = p1->getMathRepresentation().Height() / 2.0f;
+    float halfLength1 = p1->getMathRepresentation().Length() / 2.0f;
 
-    float halfWidth2 = p2->MathRepr()->Width() / 2.0f;
-    float halfHeight2 = p2->MathRepr()->Height() / 2.0f;
-    float halfLength2 = p2->MathRepr()->Length() / 2.0f;
+    float halfWidth2 = p2->getMathRepresentation().Width() / 2.0f;
+    float halfHeight2 = p2->getMathRepresentation().Height() / 2.0f;
+    float halfLength2 = p2->getMathRepresentation().Length() / 2.0f;
 
     // Вершины параллелепипедов
     QVector3D vertices1[8] = {
@@ -111,13 +111,13 @@ std::vector<QVector3D> GetAxis(std::vector<QVector3D> a, std::vector<QVector3D> 
     return axis;
 }
 
-float CollisionDetector::ProjVector3(QVector3D v, QVector3D a)
+float GA::CollisionDetector::ProjVector3(QVector3D v, QVector3D a)
 {
     a = a.normalized();
     return QVector3D::dotProduct(v, a) / a.length();
 }
 
-void CollisionDetector::ProjAxis(float& min, float& max, const std::vector<QVector3D>& points, const QVector3D& axis)
+void GA::CollisionDetector::ProjAxis(float& min, float& max, const std::vector<QVector3D>& points, const QVector3D& axis)
 {
     max = QVector3D::dotProduct(points[0], axis);
     min = max;
@@ -141,7 +141,7 @@ void CollisionDetector::ProjAxis(float& min, float& max, const std::vector<QVect
     }
 }
 
-IntersectionType CollisionDetector::IntersectionOfProj(const std::vector<QVector3D> a, const std::vector<QVector3D> b, const std::vector<QVector3D>& axis)
+GA::IntersectionType GA::CollisionDetector::IntersectionOfProj(const std::vector<QVector3D> a, const std::vector<QVector3D> b, const std::vector<QVector3D>& axis)
 {
     QVector3D norm(10000,10000,10000);
     for (int j = 0; j < axis.size(); j++)
@@ -178,27 +178,22 @@ IntersectionType CollisionDetector::IntersectionOfProj(const std::vector<QVector
         {
             return IntersectionType::PartialIntersection;
         }
-
-        float dl = std::abs(points[2] - points[1]);
-        if (dl < norm.length())
-        {
-            norm = axis[j] * dl;
-            //ориентация нормы
-            if(points[0] != min_a)
-                norm = -norm;
-        }
     }
 
     return IntersectionType::NoIntersection;
 }
 
-IntersectionType CollisionDetector::Collision(Parallelepiped* box1, Parallelepiped* box2)
-{
-    std::vector<QVector3D> points1 = box1->MathRepr()->Vertices();
+//GA::IntersectionType GA::CollisionDetector::Collision(GA::GACube* box1, GA::GACube* box2)
+//{
+   //std::vector<QVector3D> points1 = box1->MathRepr()->Vertices();
 
-    std::vector<QVector3D> points2 = box2->MathRepr()->Vertices();
+   //std::vector<QVector3D> points2 = box2->MathRepr()->Vertices();
 
-    std::vector<QVector3D> axis = GetAxis(points1, points2);
+   //std::vector<QVector3D> axis = GetAxis(points1, points2);
 
-    return IntersectionOfProj(points1, points2, axis);
-}
+   //return IntersectionOfProj(points1, points2, axis);
+
+//}
+
+//Oriented Bounding Box collision detection
+//separate axis theorem collisin detection
