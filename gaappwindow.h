@@ -1,5 +1,5 @@
-#ifndef APPWINDOW_H
-#define APPWINDOW_H
+#ifndef __GAAPPWINDOW_H
+#define __GAAPPWINDOW_H
 
 #include "GA.h"
 #include "windowsmanager.h"
@@ -7,22 +7,26 @@
 #include "menubar.h"
 #include "sceneobserver.h"
 
+using namespace GA;
+
+namespace GA
+{
 
 //Класс отвечает за отображение приложения
-class AppWindow : public QMainWindow
+class GAAppWindow : public QMainWindow
 {
     Q_OBJECT
 public:
-    explicit AppWindow(QWidget *parent = nullptr);
+    explicit GAAppWindow(QWidget *parent = nullptr);
     void recieveFileName(const QString& path);
 private:
-    QToolBar *_bar;
-    GA::GAScene *_scene;
+    QToolBar *m_bar;
+    GAScene *m_scene;
 
     QToolBar *generateSceneObserver();
     QMenuBar *generateMenuBar();
 public slots:
-    void handleObjectAddedInAppWindow(GA::GACube *object);
+    void handleObjectAddedInAppWindow(GACube *object);
 };
-
-#endif // APPWINDOW_H
+}
+#endif // __GAAPPWINDOW_H

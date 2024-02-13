@@ -1,13 +1,13 @@
 #include "gacubegraphicrepresentation.h"
 
 
-GA::GACubeGraphicRepresentation::GACubeGraphicRepresentation(const GACubeMathRepresentation &math) :
-    m_mesh(new Qt3DExtras::QCuboidMesh),
-    m_transform(new Qt3DCore::QTransform),
+GACubeGraphicRepresentation::GACubeGraphicRepresentation(const GACubeMathRepresentation &math) :
+    m_mesh(new GA::CuboidMesh),
+    m_transform(new GA::Transform),
     m_material(new GA::DiffuseMaterial)
 {
     //Привязываю графическое отображение к сцене, на которой буду отображать параллелепипед
-    this->setParent(&GA::GAScene::getRoot());
+    this->setParent(&GAScene::getRoot());
 
     //Придаю мешу необходимые габариты
     m_mesh->setXExtent(math.Width());
@@ -29,7 +29,7 @@ GA::GACubeGraphicRepresentation::GACubeGraphicRepresentation(const GACubeMathRep
     this->addComponent(m_transform);
 }
 
-GA::GACubeGraphicRepresentation::~GACubeGraphicRepresentation()
+GACubeGraphicRepresentation::~GACubeGraphicRepresentation()
 {
     //Убираю из сущности все компоненты
     this->removeComponent(this->m_material);
@@ -42,12 +42,12 @@ GA::GACubeGraphicRepresentation::~GACubeGraphicRepresentation()
     delete this->m_transform;
 }
 
-QColor GA::GACubeGraphicRepresentation::Color() const
+GA::Color GACubeGraphicRepresentation::Color() const
 {
     return m_material->ambient();
 }
 
-void GA::GACubeGraphicRepresentation::setColor(QColor color)
+void GACubeGraphicRepresentation::setColor(GA::Color color)
 {
     m_material->setAmbient(color);
 }

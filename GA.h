@@ -39,6 +39,10 @@ using Entity = Qt3DCore::QEntity;
 using DiffuseMaterial = Qt3DExtras::QDiffuseSpecularMaterial;
 using Transform = Qt3DCore::QTransform;
 using CuboidMesh = Qt3DExtras::QCuboidMesh;
+using Window3D = Qt3DExtras::Qt3DWindow;
+using String = QString;
+using Camera = Qt3DRender::QCamera;
+using OrbitCameraController = Qt3DExtras::QOrbitCameraController;
 
 enum IntersectionType : int{
     NoIntersection = 0,
@@ -51,7 +55,10 @@ class GACube;
 class GACubeMathRepresentation;
 class GACubeGraphicRepresentation;
 class GAScene;
-class ObjectManager;
+class GAObjectManager;
+class GAParser;
+class GACameraController;
+class GAAppWindow;
 }
 
 

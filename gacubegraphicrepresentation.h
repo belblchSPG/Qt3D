@@ -5,6 +5,7 @@
 #include "gacubemathrepresentation.h"
 #include "gascene.h"
 
+using namespace GA;
 
 namespace GA {
 
@@ -17,7 +18,10 @@ public:
     GACubeGraphicRepresentation() = default;
 
     //Конструктор создает графическое представление параллелепипеда на основе математического описания
-    GACubeGraphicRepresentation(const GA::GACubeMathRepresentation& math);
+    GACubeGraphicRepresentation(const GACubeMathRepresentation& math);
+
+    //Кастомный деструктор
+    ~GACubeGraphicRepresentation();
 
     //Конструктор копирования
     GACubeGraphicRepresentation(const GACubeGraphicRepresentation& graphic) = delete;
@@ -27,9 +31,6 @@ public:
 
     //Оператор присваивания с копированием
     GACubeGraphicRepresentation& operator=(const GACubeGraphicRepresentation& copy) = delete;
-
-    //Кастомный деструктор
-    ~GACubeGraphicRepresentation();
 
     //Метод возвращает ambient-цвет параллелепипеда
     GA::Color Color() const;

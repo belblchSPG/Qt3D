@@ -1,19 +1,19 @@
 #include "gacube.h"
 
-GA::GACube::GACube(const GACubeMathRepresentation &math) :
-    m_mathRepresentation(math), m_graphicRepresentation(new GA::GACubeGraphicRepresentation(math)){}
+GACube::GACube(const GACubeMathRepresentation &math) :
+    m_mathRepresentation(math), m_graphicRepresentation(new GACubeGraphicRepresentation(math)){}
 
-GA::GACube::~GACube()
+GACube::~GACube()
 {
     delete m_graphicRepresentation;
 }
 
-GA::GACubeMathRepresentation GA::GACube::getMathRepresentation() const
+GACubeMathRepresentation GACube::getMathRepresentation() const
 {
     return m_mathRepresentation;
 }
 
-GA::GACubeGraphicRepresentation& GA::GACube::getGraphicsRepresentation() const
+GACubeGraphicRepresentation& GACube::getGraphicsRepresentation() const
 {
     return *m_graphicRepresentation;
 }

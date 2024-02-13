@@ -6,6 +6,8 @@
 #include "gacubegraphicrepresentation.h"
 
 
+using namespace GA;
+
 namespace GA
 {
 //Класс, который отвечает за представление параллелепипеда на сцене.
@@ -16,10 +18,10 @@ class GACube
 private:
 
     //Математическое описание параллелпипеда
-    GA::GACubeMathRepresentation m_mathRepresentation;
+    GACubeMathRepresentation m_mathRepresentation;
 
     //Графическое предаствление параллелепипеда на сцене
-    GA::GACubeGraphicRepresentation* m_graphicRepresentation;
+    GACubeGraphicRepresentation* m_graphicRepresentation;
 
 public:
 
@@ -27,6 +29,9 @@ public:
 
     //Конструктор, создающий экзмепляр параллелепипеда на основе принимаемого математического описания
     GACube(const GACubeMathRepresentation& math);
+
+    //Кастомный деструктор
+    ~GACube();
 
     //Конструктор копирования
     GACube(const GACube& cube) = delete;
@@ -37,14 +42,11 @@ public:
     //Оператор присваивания с премещением
     GACube& operator=(GACube&& moved) = delete;
 
-    //Кастомный деструктор
-    ~GACube();
-
     //Метод возвращает указатель на графическое представление параллелепипеда на сцене
-    GA::GACubeGraphicRepresentation& getGraphicsRepresentation() const;
+    GACubeGraphicRepresentation& getGraphicsRepresentation() const;
 
     //Метод возвращает указатель на математическое описание параллелепипеда
-    GA::GACubeMathRepresentation getMathRepresentation() const;
+    GACubeMathRepresentation getMathRepresentation() const;
 };
 }
 #endif // __GACUBE_H

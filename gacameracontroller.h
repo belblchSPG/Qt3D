@@ -1,17 +1,21 @@
-#ifndef CAMERACONTROLLER_H
-#define CAMERACONTROLLER_H
+#ifndef __GACAMERACONTROLLER_H
+#define __GACAMERACONTROLLER_H
 
 #include "GA.h"
+
+using namespace GA;
+
+namespace GA{
 
 
 //Класс, который отвечает за создание камеры, а также за ее контроль
 //Все действия, связанные с управлением камерой будут находиться здесь
-class CameraController
+class GACameraController
 {
 public:
-    CameraController();
+    GACameraController();
 
-    void CreateCamera(Qt3DExtras::Qt3DWindow*, Qt3DCore::QEntity*);
+    void CreateCamera(GA::Window3D*, GA::Entity*);
 };
-
-#endif // CAMERACONTROLLER_H
+}
+#endif // GACAMERACONTROLLER_H

@@ -3,11 +3,12 @@
 
 #include "GA.h"
 #include "gacube.h"
-#include "cameracontroller.h"
-#include "objectmanager.h"
-#include "collisiondetector.h"
+#include "gacameracontroller.h"
+#include "gaobjectmanager.h"
+#include "gacollisiondetector.h"
 #include "windowsmanager.h"
 
+using namespace GA;
 
 namespace GA {
 
@@ -19,37 +20,37 @@ private:
 
     static GA::Entity* m_rootEntity;
 
-    GA::ObjectManager* _objectManager;
+    GAObjectManager* m_objectManager;
 
-    Qt3DExtras::Qt3DWindow* _view;
+    GA::Window3D* m_view;
 
 public:
 
     GAScene(QWidget* parent = nullptr);
 
-    Qt3DExtras::Qt3DWindow* getView() { return _view; }
+    GA::Window3D* getView() { return m_view; }
 
-    void OpenScene(const QString& path);
+    void OpenScene(const GA::String& path);
 
-    Qt3DCore::QEntity* createTransformedPlane(Qt3DCore::QEntity* parent, QVector3D p0, QVector3D p1, QVector3D p3, QColor color);
+    GA::Entity* createTransformedPlane(GA::Entity* parent, GA::Vector3D p0, GA::Vector3D p1, GA::Vector3D p3, GA::Color color);
 
-    void deleteObject(GA::GACube* object);
+    void deleteObject(GACube* object);
 
-    void selectObject(GA::GACube* object);
+    void selectObject(GACube* object);
 
-    void unselectObject(GA::GACube* object);
+    void unselectObject(GACube* object);
 
-    std::vector<GA::GACube*> Objects();
+    std::vector<GACube*> Objects();
 
-    void showCollisions(std::vector<std::tuple<GA::GACube*, GA::GACube*, GA::IntersectionType>>);
+    void showCollisions(std::vector<std::tuple<GACube*, GACube*, IntersectionType>>);
 
     static GA::Entity& getRoot() {return *m_rootEntity;}
 
 signals:
-    void objectAddedToAppWindow(GA::GACube* object);
+    void objectAddedToAppWindow(GACube* object);
 
 public slots:
-    void objectAdded(GA::GACube* object);
+    void objectAdded(GACube* object);
 };
 }
 #endif // __SCENE_H

@@ -1,11 +1,11 @@
-#include "appwindow.h"
+#include "gaappwindow.h"
 
-AppWindow::AppWindow(QWidget *parent)
+GAAppWindow::GAAppWindow(QWidget *parent)
     : QMainWindow{parent}
 {
-    _scene = new GA::GAScene(this);
+    m_scene = new GAScene(this);
 
-    QWidget *container = createWindowContainer(_scene->getView(), this);
+    QWidget *container = createWindowContainer(m_scene->getView(), this);
 
     this->setCentralWidget(container);
 
@@ -13,29 +13,29 @@ AppWindow::AppWindow(QWidget *parent)
 
     this->addToolBar(Qt::ToolBarArea::LeftToolBarArea,generateSceneObserver());
 
-    connect(_scene, &GA::GAScene::objectAddedToAppWindow, this, &AppWindow::handleObjectAddedInAppWindow);
+    connect(m_scene, &GAScene::objectAddedToAppWindow, this, &GAAppWindow::handleObjectAddedInAppWindow);
 }
 
 //Метод, который вызывается при нажатии на кнопку Open Scene в меню баре
-void AppWindow::recieveFileName(const QString& path)
+void GAAppWindow::recieveFileName(const GA::String& path)
 {
-    _scene->OpenScene(path);
+    m_scene->OpenScene(path);
 }
 
 //Создание тулбара для отображения объектов на сцене
-QToolBar* AppWindow::generateSceneObserver()
+QToolBar* GAAppWindow::generateSceneObserver()
 {
-    _bar = new QToolBar(this);
+    m_bar = new QToolBar(this);
 
     QLabel *title = new QLabel("Обозреватель сцены");
 
-    _bar->addWidget(title);
+    m_bar->addWidget(title);
 
-    return _bar;
+    return m_bar;
 }
 
 
-QMenuBar *AppWindow::generateMenuBar()
+QMenuBar *GAAppWindow::generateMenuBar()
 {
     QMenuBar *menuBar = new QMenuBar(this);
 
@@ -54,19 +54,19 @@ QMenuBar *AppWindow::generateMenuBar()
     menuBar->addMenu(projectMenu);
 
     connect(openSceneAction, &QAction::triggered, this, [=](){
-        QString fileName = QFileDialog::getOpenFileName(this, "Open File", "/home/", "Text Files (*.txt);;All Files (*.*)");
+        GA::String fileName = QFileDialog::getOpenFileName(this, "Open File", "/home/", "Text Files (*.txt);;All Files (*.*)");
         this->recieveFileName(fileName);
     });
 
     connect(runDetectionAction, &QAction::triggered, this, [=](){
-        GA::CollisionDetector detector;
-        _scene->showCollisions(detector.CollisionDetection(_scene->Objects()));
+        GACollisionDetector detector;
+        m_scene->showCollisions(detector.CollisionDetection(m_scene->Objects()));
     });
 
     return menuBar;
 }
 //Слот, который обрабатывает добавление каждого объекта на сцену и добавляет объект в обозреватель
-void AppWindow::handleObjectAddedInAppWindow(GA::GACube* object)
+void GAAppWindow::handleObjectAddedInAppWindow(GACube* object)
 {
     QMenuBar *objectMenuBar = new QMenuBar(this);
 
@@ -76,22 +76,22 @@ void AppWindow::handleObjectAddedInAppWindow(GA::GACube* object)
     //Удалять объект по нажатию кнопки
 
     connect(deleteAction, &QAction::triggered, objectMenu, [=](){
-        _scene->deleteObject(object);
+        m_scene->deleteObject(object);
         delete objectMenu;
     });
 
     connect(objectMenu, &QMenu::aboutToShow, this,[=](){
-        _scene->selectObject(object);
+        m_scene->selectObject(object);
     });
 
     connect(objectMenu, &QMenu::aboutToHide, this,[=](){
-        _scene->unselectObject(object);
+        m_scene->unselectObject(object);
     });
 
     objectMenu->addAction(deleteAction);
 
     objectMenuBar->addMenu(objectMenu);
 
-    _bar->addWidget(objectMenuBar);
+    m_bar->addWidget(objectMenuBar);
 }
 

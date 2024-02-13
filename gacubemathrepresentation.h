@@ -3,6 +3,7 @@
 
 #include "GA.h"
 
+using namespace GA;
 
 namespace GA {
 
@@ -16,6 +17,8 @@ public:
     //Конструктор принимает в себя координаты центра, размеры и углы поворота относительно каждый из осей параллелепипеда
     GACubeMathRepresentation(GA::Vector3D mathInfo[3]);
 
+    ~GACubeMathRepresentation() = default;
+
     //Конструктор копирования
     GACubeMathRepresentation(const GACubeMathRepresentation& math) = default;
 
@@ -25,10 +28,8 @@ public:
     //Оператор присваивания с копированием
     GACubeMathRepresentation &operator=(const GACubeMathRepresentation& copy) = default;
 
-    ~GACubeMathRepresentation() = default;
-
     //Метод возвращает координаты центра параллелепипеда
-    GA::Point Center() const;
+    Point Center() const;
 
     //Метод возвращает ширину параллелепипеда
     double Width() const;

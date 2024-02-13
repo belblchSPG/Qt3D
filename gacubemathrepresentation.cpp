@@ -1,6 +1,6 @@
 #include "gacubemathrepresentation.h"
 
-GA::GACubeMathRepresentation::GACubeMathRepresentation(GA::Vector3D mathInfo[3])
+GACubeMathRepresentation::GACubeMathRepresentation(GA::Vector3D mathInfo[3])
 {
     if(mathInfo[0].x() <= 0 || mathInfo[0].y() <= 0 || mathInfo[0].z() <= 0)
     {
@@ -14,37 +14,37 @@ GA::GACubeMathRepresentation::GACubeMathRepresentation(GA::Vector3D mathInfo[3])
     m_rotation = mathInfo[2];
 }
 
-GA::Point GA::GACubeMathRepresentation::Center() const
+GA::Point GACubeMathRepresentation::Center() const
 {
     return m_center;
 }
 
-double GA::GACubeMathRepresentation::Width() const
+double GACubeMathRepresentation::Width() const
 {
     return m_dimensions.x();
 }
 
-double GA::GACubeMathRepresentation::Height() const
+double GACubeMathRepresentation::Height() const
 {
     return m_dimensions.y();
 }
 
-double GA::GACubeMathRepresentation::Length() const
+double GACubeMathRepresentation::Length() const
 {
     return m_dimensions.z();
 }
 
-double GA::GACubeMathRepresentation::XRot() const
+double GACubeMathRepresentation::XRot() const
 {
     return m_rotation.x();
 }
 
-double GA::GACubeMathRepresentation::YRot() const
+double GACubeMathRepresentation::YRot() const
 {
     return m_rotation.y();
 }
 
-double GA::GACubeMathRepresentation::ZRot() const
+double GACubeMathRepresentation::ZRot() const
 {
     return m_rotation.z();
 }

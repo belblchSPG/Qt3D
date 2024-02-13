@@ -1,47 +1,47 @@
 #include "gascene.h"
 
-GA::Entity* GA::GAScene::m_rootEntity = new GA::Entity();
+Entity* GAScene::m_rootEntity = new GA::Entity();
 
-GA::GAScene::GAScene(QWidget *parent)
+GAScene::GAScene(QWidget *parent)
     : QWidget(parent)
 {
 
-    _objectManager = new ObjectManager(m_rootEntity);
+    m_objectManager = new GAObjectManager(m_rootEntity);
 
-    connect(_objectManager, &ObjectManager::objectAdded, this, &GAScene::objectAdded);
+    connect(m_objectManager, &GAObjectManager::objectAdded, this, &GAScene::objectAdded);
 
-    _view = new Qt3DExtras::Qt3DWindow();
+    m_view = new GA::Window3D();
 
-    _view->defaultFrameGraph()->setClearColor(QColor(QRgb(0x575757)));
+    m_view->defaultFrameGraph()->setClearColor(GA::Color(QRgb(0x575757)));
 
-    CameraController cameraController;
+    GACameraController cameraController;
 
-    cameraController.CreateCamera(_view,m_rootEntity);
+    cameraController.CreateCamera(m_view,m_rootEntity);
 
     // Плоскость XY (по умолчанию)
-    createTransformedPlane(m_rootEntity, QVector3D(0.0f, 0.0f, 0.0f), QVector3D(10.0f, 0.0f, 0.0f), QVector3D(0.0f, 10.0f, 0.0f), Qt::green);
-    createTransformedPlane(m_rootEntity, QVector3D(0.0f, 0.0f, 0.0f), QVector3D(0.0f, 10.0f, 0.0f), QVector3D(10, 0.0f, 0.0f), Qt::green);
+    createTransformedPlane(m_rootEntity, GA::Vector3D(0.0f, 0.0f, 0.0f), GA::Vector3D(10.0f, 0.0f, 0.0f), GA::Vector3D(0.0f, 10.0f, 0.0f), Qt::green);
+    createTransformedPlane(m_rootEntity, GA::Vector3D(0.0f, 0.0f, 0.0f), GA::Vector3D(0.0f, 10.0f, 0.0f), GA::Vector3D(10, 0.0f, 0.0f), Qt::green);
 
     // Плоскость XZ
-    createTransformedPlane(m_rootEntity, QVector3D(0.0f, 0.0f, 0.0f), QVector3D(10, 0.0f, 0.0f), QVector3D(0.0f, 0.0f, 10.0f), Qt::blue);
-    createTransformedPlane(m_rootEntity, QVector3D(0.0f, 0.0f, 0.0f), QVector3D(0.0f, 0.0f, 10.0f), QVector3D(10, 0.0f, 0.0f), Qt::blue);
+    createTransformedPlane(m_rootEntity, GA::Vector3D(0.0f, 0.0f, 0.0f), GA::Vector3D(10, 0.0f, 0.0f), GA::Vector3D(0.0f, 0.0f, 10.0f), Qt::blue);
+    createTransformedPlane(m_rootEntity, GA::Vector3D(0.0f, 0.0f, 0.0f), GA::Vector3D(0.0f, 0.0f, 10.0f), GA::Vector3D(10, 0.0f, 0.0f), Qt::blue);
 
     // Плоскость YZ
-    createTransformedPlane(m_rootEntity, QVector3D(0.0f, 0.0f, 0.0f), QVector3D(0.0f, 10.0f, 0.0f), QVector3D(0.0f, 0.0f, 10.0f), Qt::red);
-    createTransformedPlane(m_rootEntity, QVector3D(0.0f, 0.0f, 0.0f), QVector3D(0.0f, 0.0f, 10.0f), QVector3D(0.0f, 10.0f, 0.0f), Qt::red);
+    createTransformedPlane(m_rootEntity, GA::Vector3D(0.0f, 0.0f, 0.0f), GA::Vector3D(0.0f, 10.0f, 0.0f), GA::Vector3D(0.0f, 0.0f, 10.0f), Qt::red);
+    createTransformedPlane(m_rootEntity, GA::Vector3D(0.0f, 0.0f, 0.0f), GA::Vector3D(0.0f, 0.0f, 10.0f), GA::Vector3D(0.0f, 10.0f, 0.0f), Qt::red);
 
-    _view->setRootEntity(m_rootEntity);
+    m_view->setRootEntity(m_rootEntity);
 }
 
-void GA::GAScene::OpenScene(const QString &path)
+void GAScene::OpenScene(const GA::String &path)
 {
-    _objectManager->GenerateObjectsFromFile(path);
+    m_objectManager->GenerateObjectsFromFile(path);
 }
 
-Qt3DCore::QEntity *GA::GAScene::createTransformedPlane(Qt3DCore::QEntity *parent, QVector3D p0, QVector3D p1, QVector3D p3, QColor color) {
+GA::Entity *GAScene::createTransformedPlane(GA::Entity *parent, GA::Vector3D p0, GA::Vector3D p1, GA::Vector3D p3, GA::Color color) {
     // Векторы, образующие плоскость
-    QVector3D v1 = p1 - p0;
-    QVector3D v2 = p3 - p0;
+    GA::Vector3D v1 = p1 - p0;
+    GA::Vector3D v2 = p3 - p0;
 
     // Создание стандартной сетки в плоскости XZ
     Qt3DExtras::QPlaneMesh *planeMesh = new Qt3DExtras::QPlaneMesh();
@@ -51,36 +51,36 @@ Qt3DCore::QEntity *GA::GAScene::createTransformedPlane(Qt3DCore::QEntity *parent
     planeMesh->setHeight(wz);
 
     // Сущность плоскости
-    Qt3DCore::QEntity *planeEntity = new Qt3DCore::QEntity(parent);
+    GA::Entity *planeEntity = new GA::Entity(parent);
     // Добавление сетки к сущности
     planeEntity->addComponent(planeMesh);
 
     // Вычисление вектора нормали
-    QVector3D n1 = QVector3D::crossProduct(v1, v2);
+    GA::Vector3D n1 = GA::Vector3D::crossProduct(v1, v2);
 
     // Определение матрицы поворота для выравнивания вектора нормали плоскости с вектором нормали сгенерированной плоскости (т.е. осью Y)
-    QVector3D n2(0, 1, 0);
-    QQuaternion rot = QQuaternion::rotationTo(n2, n1);
+    GA::Vector3D n2(0, 1, 0);
+    GA::Quaternion rot = GA::Quaternion::rotationTo(n2, n1);
 
     // Теперь мы трансформируем вектор w1 (соответствующий вектору v1) в целевую плоскость
-    QVector3D w1(-1, 0, 0);
+    GA::Vector3D w1(-1, 0, 0);
 
     // Учтите: PlaneMesh создана в плоскости XZ, с нижней левой точкой в q0=(w/2, 0, -h/2)
     // Если пронумеровать против часовой стрелки, следующая точка - q1=(-w/2, 0, -h/2), и нормализованный вектор w1 между q0 и q1
     // равен w1=(-1, 0, 0)
-    QVector3D w1Rotated = rot.rotatedVector(w1);
+    GA::Vector3D w1Rotated = rot.rotatedVector(w1);
 
     // Теперь нам нужно вычислить матрицу поворота для выравнивания вектора w1 с вектором v1
-    QQuaternion rot2 = QQuaternion::rotationTo(w1Rotated, v1);
+    GA::Quaternion rot2 = GA::Quaternion::rotationTo(w1Rotated, v1);
 
     // Объединяем обе матрицы поворота (учтите порядок умножения матриц!)
-    QQuaternion planeRotation = rot2 * rot;
+    GA::Quaternion planeRotation = rot2 * rot;
 
     // Перенос к целевой якорной точке (центр плоскости)
     QVector3D transVec(0,0,0);
 
     // Создание трансформации
-    Qt3DCore::QTransform *transform = new Qt3DCore::QTransform();
+    GA::Transform *transform = new GA::Transform();
     transform->setTranslation(transVec);
     transform->setRotation(planeRotation);
 
@@ -95,32 +95,32 @@ Qt3DCore::QEntity *GA::GAScene::createTransformedPlane(Qt3DCore::QEntity *parent
     return planeEntity;
 }
 
-void GA::GAScene::deleteObject(GA::GACube *object)
+void GAScene::deleteObject(GACube *object)
 {
-    _objectManager->deleteObject(object);
+    m_objectManager->deleteObject(object);
 }
 
-void GA::GAScene::selectObject(GA::GACube *object)
+void GAScene::selectObject(GACube *object)
 {
-    _objectManager->selectObject(object);
+    m_objectManager->selectObject(object);
 }
 
-void GA::GAScene::unselectObject(GA::GACube *object)
+void GAScene::unselectObject(GACube *object)
 {
-    _objectManager->unselectObject(object);
+    m_objectManager->unselectObject(object);
 }
 
-std::vector<GA::GACube *> GA::GAScene::Objects()
+std::vector<GACube *> GAScene::Objects()
 {
-    return _objectManager->Objects();
+    return m_objectManager->Objects();
 }
 
-void GA::GAScene::showCollisions(std::vector<std::tuple<GA::GACube *, GA::GACube *, IntersectionType> > collisions)
+void GAScene::showCollisions(std::vector<std::tuple<GACube *, GACube *, GA::IntersectionType> > collisions)
 {
-    _objectManager->showCollisions(collisions);
+    m_objectManager->showCollisions(collisions);
 }
 
-void GA::GAScene::objectAdded(GA::GACube *object)
+void GAScene::objectAdded(GACube *object)
 {
     // Передаем объект в AppWindow
     emit objectAddedToAppWindow(object);

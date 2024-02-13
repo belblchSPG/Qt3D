@@ -1,21 +1,21 @@
-#include "parser.h"
+#include "gaparser.h"
 
-std::vector<GA::GACubeMathRepresentation> GA::Parser::getInfo(const QString &path)
+std::vector<GACubeMathRepresentation> GAParser::getInfo(const GA::String &path)
 {
-    std::vector<GA::GACubeMathRepresentation> vec;
+    std::vector<GACubeMathRepresentation> vec;
     std::ifstream file(path.toStdString());
     std::string line;
     std::istringstream iss(line);
     while(std::getline(file, line))
     {
-        GA::GACubeMathRepresentation math;
+        GACubeMathRepresentation math;
         parseObject(line, math);
         vec.push_back(math);
     }
     return vec;
 }
 
-void GA::Parser::parseObject(const std::string& line, GA::GACubeMathRepresentation& math)
+void GAParser::parseObject(const std::string& line, GACubeMathRepresentation& math)
 {
     std::istringstream iss(line);
     float w,h,l,x,y,z, xr, yr,zr;

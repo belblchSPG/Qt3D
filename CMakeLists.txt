@@ -28,16 +28,16 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         #Icons/arrow-39-16.png
         #C:/Users/User/Downloads/arrow-39-16.png
 
-        cameracontroller.h cameracontroller.cpp
-        collisiondetector.h collisiondetector.cpp
-        objectmanager.h objectmanager.cpp
+        gacameracontroller.h gacameracontroller.cpp
+        gacollisiondetector.h gacollisiondetector.cpp
+        gaobjectmanager.h gaobjectmanager.cpp
 
 
         gacubegraphicrepresentation.h gacubegraphicrepresentation.cpp
         gacubemathrepresentation.h gacubemathrepresentation.cpp
-        appwindow.h appwindow.cpp
+        gaappwindow.h gaappwindow.cpp
 
-        parser.h parser.cpp
+        gaparser.h gaparser.cpp
         GA.h
         tst_gacube.cpp
 )

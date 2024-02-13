@@ -1,11 +1,14 @@
+#include "GA.h"
 #include "gacube.h"
 #include "scenemodifier.h"
 #include "gascene.h"
-#include "appwindow.h"
+#include "gaappwindow.h"
 
 #include <QApplication>
 #include <QMainWindow>
 #include <gtest/gtest.h>
+
+using namespace GA;
 
 int main(int argc, char *argv[])
 {
@@ -13,11 +16,11 @@ int main(int argc, char *argv[])
 
     QApplication app(argc, argv);
 
-    AppWindow *w = new AppWindow();
+    GAAppWindow *w = new GAAppWindow();
 
     w->showMaximized();
 
-    //RUN_ALL_TESTS();
+    RUN_ALL_TESTS();
 
     return app.exec();
 }

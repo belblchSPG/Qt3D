@@ -1,7 +1,7 @@
 #ifndef MENUBAR_H
 #define MENUBAR_H
 
-#include "appwindow.h"
+#include "gaappwindow.h"
 
 #include <QWidget>
 #include <QMenuBar>
