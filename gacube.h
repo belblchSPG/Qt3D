@@ -15,6 +15,7 @@ namespace GA
 
 class GACube
 {
+
 private:
 
     //Математическое описание параллелпипеда
@@ -42,10 +43,10 @@ public:
     //Оператор присваивания с премещением
     GACube& operator=(GACube&& moved) = delete;
 
-    //Метод возвращает указатель на графическое представление параллелепипеда на сцене
+    //Метод возвращает графическое представление параллелепипеда на сцене
     GACubeGraphicRepresentation& getGraphicsRepresentation() const;
 
-    //Метод возвращает указатель на математическое описание параллелепипеда
+    //Метод возвращает математическое описание параллелепипеда
     GACubeMathRepresentation getMathRepresentation() const;
 };
 }

@@ -1,200 +1,338 @@
 #include "gacollisiondetector.h"
 
-GA::GACollisionDetector::GACollisionDetector() {}
-
 std::vector<std::tuple<GACube*,GACube*,GA::IntersectionType>> GACollisionDetector::CollisionDetection(const std::vector<GACube*>& objects)
 {
-   //qDebug() << "Collision detection started";
-
+   //Создаю список, который будет хранить информацию о коллизях
    std::vector<std::tuple<GACube*,GACube*,GA::IntersectionType>> collisions;
 
+   //Если на сцене один объект, то проверки не происходят
    if(objects.size() == 1)
    {
        collisions.push_back(std::tuple<GACube*,GACube*,GA::IntersectionType>(objects[0],nullptr,GA::IntersectionType::NoIntersection));
    }
 
-   for (size_t i = 0; i < objects.size(); ++i)
-   {
-       for (size_t j = i + 1; j < objects.size(); ++j)
+   else
+   {    //Каждый между объект проверяется на коллизии с другим единожды
+       for (size_t i = 0; i < objects.size(); ++i)
        {
-           GACube* c1 = objects[i];
-           GACube* c2 = objects[j];
-           //qDebug() << "Check " << c1 << "and " << c2;
+           for (size_t j = i + 1; j < objects.size(); ++j)
+           {
+               GACube* c1 = objects[i];
+               GACube* c2 = objects[j];
 
-          // collisions.push_back(std::tuple<GA::GACube*,GA::GACube*,GA::IntersectionType>(c1,c2,Collision(c1,c2)));
+               //Информация после каждой проверки добавляется в список
+               collisions.push_back(std::tuple<GA::GACube*,GA::GACube*,GA::IntersectionType>(c1,c2,CalculateCollision(*c1,*c2)));
+           }
        }
-    }
+   }
+
    return collisions;
 }
 
-bool SharedVertexesDetection(GACube *p1, GACube *p2)
+IntersectionType GACollisionDetector::CalculateCollision(const GACube& cube1, const GACube& cube2)
 {
-    GA::Vector3D center1 = p1->getMathRepresentation().Center();
-    GA::Vector3D center2 = p2->getMathRepresentation().Center();
+    GA::GACubeMathRepresentation Cube1MathRepresentation = cube1.getMathRepresentation();
+    GA::GACubeMathRepresentation Cube2MathRepresentation = cube2.getMathRepresentation();
 
-    float halfWidth1 = p1->getMathRepresentation().Width() / 2.0f;
-    float halfHeight1 = p1->getMathRepresentation().Height() / 2.0f;
-    float halfLength1 = p1->getMathRepresentation().Length() / 2.0f;
+    //Получаю координаты центра у параллелепипедов
+    GA::Point Pa = Cube1MathRepresentation.Center();
+    GA::Point Pb = Cube2MathRepresentation.Center();
 
-    float halfWidth2 = p2->getMathRepresentation().Width() / 2.0f;
-    float halfHeight2 = p2->getMathRepresentation().Height() / 2.0f;
-    float halfLength2 = p2->getMathRepresentation().Length() / 2.0f;
+    //Получаю половины ширины, высоты и длины
+    double Ha = Cube1MathRepresentation.Height() / 2;
+    double Wa = Cube1MathRepresentation.Width() / 2;
+    double Da = Cube1MathRepresentation.Length() / 2;
+    double Hb = Cube2MathRepresentation.Height() / 2;
+    double Wb = Cube2MathRepresentation.Width() / 2;
+    double Db = Cube2MathRepresentation.Length() / 2;
 
-    // Вершины параллелепипедов
-    GA::Vector3D vertices1[8] = {
-        center1 + GA::Vector3D(halfWidth1, halfHeight1, halfLength1),
-        center1 + GA::Vector3D(halfWidth1, halfHeight1, -halfLength1),
-        center1 + GA::Vector3D(halfWidth1, -halfHeight1, halfLength1),
-        center1 + GA::Vector3D(halfWidth1, -halfHeight1, -halfLength1),
-        center1 + GA::Vector3D(-halfWidth1, halfHeight1, halfLength1),
-        center1 + GA::Vector3D(-halfWidth1, halfHeight1, -halfLength1),
-        center1 + GA::Vector3D(-halfWidth1, -halfHeight1, halfLength1),
-        center1 + GA::Vector3D(-halfWidth1, -halfHeight1, -halfLength1)
-    };
+    //Получаю матрицы поворота параллелепипедов
+    std::vector<std::vector<double>> rotationVectorsA = Cube1MathRepresentation.CalculateRotationVectors();
+    std::vector<std::vector<double>> rotationVectorsB = Cube2MathRepresentation.CalculateRotationVectors();
 
-    GA::Vector3D vertices2[8] = {
-        center2 + GA::Vector3D(halfWidth2, halfHeight2, halfLength2),
-        center2 + GA::Vector3D(halfWidth2, halfHeight2, -halfLength2),
-        center2 + GA::Vector3D(halfWidth2, -halfHeight2, halfLength2),
-        center2 + GA::Vector3D(halfWidth2, -halfHeight2, -halfLength2),
-        center2 + GA::Vector3D(-halfWidth2, halfHeight2, halfLength2),
-        center2 + GA::Vector3D(-halfWidth2, halfHeight2, -halfLength2),
-        center2 + GA::Vector3D(-halfWidth2, -halfHeight2, halfLength2),
-        center2 + GA::Vector3D(-halfWidth2, -halfHeight2, -halfLength2)
-    };
+    //Получаю единичные векторы осей
+    std::vector<double> Ax = { rotationVectorsA[0][0], rotationVectorsA[0][1], rotationVectorsA[0][2] };
+    std::vector<double> Ay = { rotationVectorsA[1][0], rotationVectorsA[1][1], rotationVectorsA[1][2] };
+    std::vector<double> Az = { rotationVectorsA[2][0], rotationVectorsA[2][1], rotationVectorsA[2][2] };
 
-    for(int i = 0; i < 8; ++i)
-    {
-        for(int j = 0; j < 8; ++j)
-        {
-            if(vertices1[i] == vertices2[j])
-            {
-                return true;
-            }
-        }
-    }
-    return false;
+    std::vector<double> Bx = { rotationVectorsB[0][0], rotationVectorsB[0][1], rotationVectorsB[0][2] };
+    std::vector<double> By = { rotationVectorsB[1][0], rotationVectorsB[1][1], rotationVectorsB[1][2] };
+    std::vector<double> Bz = { rotationVectorsB[2][0], rotationVectorsB[2][1], rotationVectorsB[2][2] };
+
+    //Вычисляю вектор разности центров
+    std::vector<double> T = {abs(Pb[0] - Pa[0]), abs(Pb[1] - Pa[1]), abs(Pb[2] - Pa[2])};
+
+    //Переменные необходимые для расчетов и удобной отладки
+    double length;
+    double length1;
+    double length2;
+    double length3;
+    double length4;
+    double sum;
+    double Rxx = GACubeMathRepresentation::dotProduct(Ax, Bx);
+    double Rxy = GACubeMathRepresentation::dotProduct(Ax, By);
+    double Rxz = GACubeMathRepresentation::dotProduct(Ax, Bz);
+    double Ryx = GACubeMathRepresentation::dotProduct(Ay, Bx);
+    double Ryy = GACubeMathRepresentation::dotProduct(Ay, By);
+    double Ryz = GACubeMathRepresentation::dotProduct(Ay, Bz);
+    double Rzx = GACubeMathRepresentation::dotProduct(Az, Bx);
+    double Rzy = GACubeMathRepresentation::dotProduct(Az, By);
+    double Rzz = GACubeMathRepresentation::dotProduct(Az, Bz);
+
+    // case 1
+    // L = Ax
+    //  |T * Ax | > Wa + |WbRxx| + |HbRxy| + |DbRxz|
+    //  length > Wa + length1 + length2 + length3
+
+    length = abs(GACubeMathRepresentation::dotProduct(T, Ax));
+
+    length1 = std::abs(Wb * Rxx);
+    length2 = std::abs(Hb * Rxy);
+    length3 = std::abs(Db * Rxz);
+
+    sum = (Wa + length1 + length2 + length3);
+
+    bool case1 = length > sum;
+
+    if (case1) return GA::IntersectionType::NoIntersection;
+
+    // case 2 done
+    // L = Ay
+    //  |T * Ay | > Ha + |WbRyx| + |HbRyy| + |DbRyz|
+    //  length > Ha + length1 + length2 + length3
+
+    length = abs(GACubeMathRepresentation::dotProduct(T, Ay));
+
+    length1 = std::abs(Wb * Ryx);
+    length2 = std::abs(Hb * Ryy);
+    length3 = std::abs(Db * Ryz);
+
+    sum = Ha + length1 + length2 + length3;
+
+    bool case2 = length > sum;
+
+    if (case2) return GA::IntersectionType::NoIntersection;
+
+    // case 3 done
+    // L = Az
+    //  |T * Az | > Da + |WbRzx| + |HbRzy| + |DbRzz|
+    //  length > Da + length1 + length2 + length3
+
+    length = abs(GACubeMathRepresentation::dotProduct(T, Az));
+
+    length1 = std::abs(Wb * Rzx);
+    length2 = std::abs(Hb * Rzy);
+    length3 = std::abs(Db * Rzz);
+
+    sum = (Da + length1 + length2 + length3);
+
+    bool case3 = length > sum;
+
+    if (case3) return GA::IntersectionType::NoIntersection;
+
+    // case 4 done
+    // L = Bx
+    //  |T * Bx | > Wb + |WaRxx| + |HaRyx| + |DaRzx|
+    //  length > Wb + length1 + length2 + length3
+
+    length = abs(GACubeMathRepresentation::dotProduct(T, Bx));
+
+    length1 = std::abs(Wa * Rxx);
+    length2 = std::abs(Ha * Ryx);
+    length3 = std::abs(Da * Rzx);
+
+    sum = (Wb + length1 + length2 + length3);
+
+    bool case4 = length > sum;
+
+    if (case4) return GA::IntersectionType::NoIntersection;
+
+    // case 5 done
+    // L = By
+    //  |T * By | > Hb + |WaRxy| + |HaRyy| + |DaRzy|
+    //  length > Hb + length1 + length2 + length3
+
+    length = abs(GACubeMathRepresentation::dotProduct(T, By));
+
+    length1 = std::abs(Wa * Rxy);
+    length2 = std::abs(Ha * Ryy);
+    length3 = std::abs(Da * Rzy);
+
+    sum = (Hb + length1 + length2 + length3);
+
+    bool case5 = length > sum;
+
+    if (case5) return GA::IntersectionType::NoIntersection;
+
+    // case 6 done
+    // L = Bz
+    //  |T * Bz | > Db + |WaRxz| + |HaRyz| + |DaRzz|
+    //  length > Db + length1 + length2 + length3
+
+    length = abs(GACubeMathRepresentation::dotProduct(T, Bz));
+
+    length1 = std::abs(Wa * Rxz);
+    length2 = std::abs(Ha * Ryz);
+    length3 = std::abs(Da * Rzz);
+
+    sum = (Db + length1 + length2 + length3);
+
+    bool case6 = length > sum;
+
+    if (case6) return GA::IntersectionType::NoIntersection;
+
+    // case 7 done
+    //  |T * (Ax x Bx) | > |HaRzx| + |DaRyx| + |HbRxz| + |DbRxy|
+    //  length > Wa + length1 + length2 + length3 + length4
+
+    length = abs(GACubeMathRepresentation::dotProduct(T, GACubeMathRepresentation::crossProduct(Ax, Bx)));
+
+    length1 = std::abs(Ha * Rzx);
+    length2 = std::abs(Da * Ryx);
+    length3 = std::abs(Hb * Rxz);
+    length4 = std::abs(Db * Rxy);
+
+    sum = length1 + length2 + length3 + length4;
+
+    bool case7 = length > sum;
+
+    if (case7) return GA::IntersectionType::NoIntersection;
+
+    // case 8 done
+    //  |T * (Ax x By) | > |HaRzy| + |DaRyy| + |WbRxz| + |DbRxx|
+    //  length > Wa + length1 + length2 + length3 + length4
+
+    length = abs(GACubeMathRepresentation::dotProduct(T, GACubeMathRepresentation::crossProduct(Ax, By)));
+
+    length1 = std::abs(Ha * Rzy);
+    length2 = std::abs(Da * Ryy);
+    length3 = std::abs(Wb * Rxz);
+    length4 = std::abs(Db * Rxx);
+
+    sum = (length1 + length2 + length3 + length4);
+
+    bool case8 = length > sum;
+
+    if (case8) return GA::IntersectionType::NoIntersection;
+
+    // case 9 done
+    //  |T * (Ax x Bz) | > |HaRzz| + |DaRyz| + |WbRxy| + |HbRxx|
+    //  length > Wa + length1 + length2 + length3 + length4
+
+    length = abs(GACubeMathRepresentation::dotProduct(T, GACubeMathRepresentation::crossProduct(Ax, Bz)));
+
+    length1 = std::abs(Ha * Rzz);
+    length2 = std::abs(Da * Ryz);
+    length3 = std::abs(Wb * Rxy);
+    length4 = std::abs(Hb * Rxx);
+
+    sum = (length1 + length2 + length3 + length4);
+
+    bool case9 = length > sum;
+
+    if (case9) return GA::IntersectionType::NoIntersection;
+
+    // case 10 done
+    //  |T * (Ay x Bx) | > |WaRzx| + |DaRxx| + |HbRyz| + |DbRyy|
+    //  length > Wa + length1 + length2 + length3 + length4
+
+    length = abs(GACubeMathRepresentation::dotProduct(T, GACubeMathRepresentation::crossProduct(Ay, Bx)));
+
+    length1 = std::abs(Wa * Rzx);
+    length2 = std::abs(Da * Rxx);
+    length3 = std::abs(Hb * Ryz);
+    length4 = std::abs(Db * Ryy);
+
+    sum = (length1 + length2 + length3 + length4);
+
+    bool case10 = length > sum;
+
+    if (case10) return GA::IntersectionType::NoIntersection;
+
+    // case 11 done
+    //  |T * (Ay x By) | > |WaRzy| + |DaRxy| + |WbRyz| + |DbRyx|
+    //  length > Wa + length1 + length2 + length3 + length4
+
+    length = abs(GACubeMathRepresentation::dotProduct(T, GACubeMathRepresentation::crossProduct(Ay, By)));
+
+    length1 = std::abs(Wa * Rzy);
+    length2 = std::abs(Da * Rxy);
+    length3 = std::abs(Wb * Ryz);
+    length4 = std::abs(Db * Ryx);
+
+    sum = (length1 + length2 + length3 + length4);
+
+    bool case11 = length > sum;
+
+    if (case11) return GA::IntersectionType::NoIntersection;
+
+    // case 12 done
+    //  |T * (Ay x Bz) | > |WaRzz| + |DaRxz| + |WbRyy| + |HbRyx|
+    //  length > Wa + length1 + length2 + length3 + length4
+
+    length = abs(GACubeMathRepresentation::dotProduct(T, GACubeMathRepresentation::crossProduct(Ay, Bz)));
+
+    length1 = std::abs(Wa * Rzz);
+    length2 = std::abs(Da * Rxz);
+    length3 = std::abs(Wb * Ryy);
+    length4 = std::abs(Hb * Ryx);
+
+    sum = (length1 + length2 + length3 + length4);
+
+    bool case12 = length > sum;
+
+    if (case12) return GA::IntersectionType::NoIntersection;
+
+    // case 13 done
+    //  |T * (Az x Bx) | > |WaRyx| + |HaRxx| + |HbRzz| + |DbRzy|
+    //  length > Wa + length1 + length2 + length3 + length4
+
+    length = abs(GACubeMathRepresentation::dotProduct(T, GACubeMathRepresentation::crossProduct(Az, Bx)));
+
+    length1 = std::abs(Wa * Ryx);
+    length2 = std::abs(Ha * Rxx);
+    length3 = std::abs(Hb * Rzz);
+    length4 = std::abs(Db * Rzy);
+
+    sum = (length1 + length2 + length3 + length4);
+
+    bool case13 = length > sum;
+
+    if (case13) return GA::IntersectionType::NoIntersection;
+
+    // case 14 done
+    //  |T * (Az x By) | > |WaRyy| + |HaRxy| + |WbRzz| + |DbRzx|
+    //  length > Wa + length1 + length2 + length3 + length4
+
+    length = abs(GACubeMathRepresentation::dotProduct(T, GACubeMathRepresentation::crossProduct(Az, By)));
+
+    length1 = std::abs(Wa * Ryy);
+    length2 = std::abs(Ha * Rxy);
+    length3 = std::abs(Wb * Rzz);
+    length4 = std::abs(Db * Rzx);
+
+    sum = (length1 + length2 + length3 + length4);
+
+    bool case14 = length > sum;
+
+    if (case14) return GA::IntersectionType::NoIntersection;
+
+    // case 15
+    //  |T * (Az x Bz) | > |WaRyz| + |HaRxz| + |WbRzy| + |HbRzx|
+    //  length > Wa + length1 + length2 + length3 + length4
+
+    length = abs(GACubeMathRepresentation::dotProduct(T, GACubeMathRepresentation::crossProduct(Az, Bz)));
+
+    length1 = std::abs(Wa * Ryz);
+    length2 = std::abs(Ha * Rxz);
+    length3 = std::abs(Wb * Rzy);
+    length4 = std::abs(Hb * Rzx);
+
+    sum = (length1 + length2 + length3 + length4);
+
+    bool case15 = length > sum;
+
+    if(case15) return GA::IntersectionType::NoIntersection;
+
+    return GA::IntersectionType::FullIntersection;
 }
-
-std::vector<GA::Vector3D> GetAxis(std::vector<GA::Vector3D> a, std::vector<GA::Vector3D> b)
-{
-    GA::Vector3D A;
-    GA::Vector3D B;
-
-    std::vector<GA::Vector3D> axis;
-
-    for(int i = 1; i < 4; ++i)
-    {
-        A = a[i] - a[0];
-        B = a[(i+1)%3+1] - a[0];
-        axis.push_back(GA::Vector3D::crossProduct(A,B).normalized());
-    }
-
-    for (int i = 1; i < 4; i++)
-    {
-        A = b[i] - b[0];
-        B = b[(i+1)%3+1] - b[0];
-        axis.push_back(GA::Vector3D::crossProduct(A,B).normalized());
-    }
-
-    for (int i = 1; i < 4; i++)
-    {
-        A = a[i] - a[0];
-        for (int j = 1; j < 4; j++)
-        {
-            B = b[j] - b[0];
-            if (GA::Vector3D::crossProduct(A,B).length() != 0)
-            {
-                axis.push_back(GA::Vector3D::crossProduct(A,B).normalized());
-            }
-        }
-    }
-    return axis;
-}
-
-double GACollisionDetector::ProjVector3(GA::Vector3D v, GA::Vector3D a)
-{
-    a = a.normalized();
-    return GA::Vector3D::dotProduct(v, a) / a.length();
-}
-
-void GACollisionDetector::ProjAxis(double& min, double& max, const std::vector<GA::Vector3D>& points, const GA::Vector3D& axis)
-{
-    max = GA::Vector3D::dotProduct(points[0], axis);
-    min = max;
-
-    max = ProjVector3(points[0], axis);
-    min = ProjVector3(points[0], axis);
-
-    for (int i = 1; i < 4; i++)
-    {
-        float tmp = ProjVector3(points[i], axis);
-
-        if (tmp > max)
-        {
-            max = tmp;
-        }
-
-        if (tmp < min)
-        {
-            min = tmp;
-        }
-    }
-}
-
-GA::IntersectionType GACollisionDetector::IntersectionOfProj(const std::vector<GA::Vector3D> a, const std::vector<GA::Vector3D> b, const std::vector<GA::Vector3D>& axis)
-{
-    GA::Vector3D norm(10000,10000,10000);
-    for (int j = 0; j < axis.size(); j++)
-    {
-        //проекции куба a
-        double max_a;
-        double min_a;
-        ProjAxis(min_a,max_a,a,axis[j]);
-
-        //проекции куба b
-        double max_b;
-        double min_b;
-        ProjAxis(min_b,max_b,b,axis[j]);
-
-        std::vector<double> points = {min_a, max_a, min_b, max_b};
-        std::sort(points.begin(), points.end());
-
-        double sum = (max_b - min_b) + (max_a - min_a);
-        double len = std::abs(points[3] - points[0]);
-
-        qDebug() << sum << len;
-
-        if(len*2==sum)
-        {
-            return GA::IntersectionType::FullIntersection;
-        }
-
-        if(sum == len)
-        {
-            return GA::IntersectionType::SharedVertex;
-        }
-
-        if (sum > len)
-        {
-            return GA::IntersectionType::PartialIntersection;
-        }
-    }
-
-    return GA::IntersectionType::NoIntersection;
-}
-
-//GA::IntersectionType GA::CollisionDetector::Collision(GA::GACube* box1, GA::GACube* box2)
-//{
-   //std::vector<QVector3D> points1 = box1->MathRepr()->Vertices();
-
-   //std::vector<QVector3D> points2 = box2->MathRepr()->Vertices();
-
-   //std::vector<QVector3D> axis = GetAxis(points1, points2);
-
-   //return IntersectionOfProj(points1, points2, axis);
-
-//}
-
-//Oriented Bounding Box collision detection
-//separate axis theorem collisin detection

@@ -1,29 +1,13 @@
 #include "gaobjectmanager.h"
 
-GAObjectManager::GAObjectManager()
+GAObjectManager::~GAObjectManager()
 {
-
+    for(int i = 0; i < m_objects.size(); ++i)
+    {
+        delete m_objects[i];
+    }
+    m_objects.clear();
 }
-
-GAObjectManager::GAObjectManager(GA::Entity * rootEntity)
-{
-    m_rootEntity = rootEntity;
-}
-
-//void ObjectManager::GenerateCuboidByLWHC(QVector<QVector<QLineEdit *> > vector)
-//{
-//    float width = vector[0][0]->text().toDouble();
-//    float height = vector[0][1]->text().toDouble();
-//    float length = vector[0][2]->text().toDouble();
-//    float x = vector[1][0]->text().toDouble();
-//    float y = vector[1][1]->text().toDouble();
-//    float z = vector[1][2]->text().toDouble();
-//
-//    Parallelepiped *object = new Parallelepiped(width,height,length,QVector3D(x,y,z), _rootEntity);
-//    _objects.push_back(object);
-//
-//    emit objectAdded(object);
-//}
 
 std::vector<GACube*> GAObjectManager::Objects() const
 {
@@ -32,47 +16,49 @@ std::vector<GACube*> GAObjectManager::Objects() const
 
 void GAObjectManager::GenerateObjectsFromFile(const GA::String &path)
 {
+    //Создаю парсер
     GAParser parser;
 
+    //Создаю математические представляния на основе информации из файлов
     std::vector<GACubeMathRepresentation> objectsToGenerate = parser.getInfo(path);
 
+    //На базе полученных математических представлений создаю графическое представление объектов и добавляю объект на сцену
     for(const GACubeMathRepresentation& a : objectsToGenerate)
     {
-        GA::Vector3D mathInfo[3];
+        //Создаю объект
+        GACube *object = new GACube(a);
 
-        mathInfo[0] = GA::Size(a.Width(),a.Height(),a.Length());
-        mathInfo[1] = a.Center();
-        mathInfo[2] = GA::Rotation(a.XRot(),a.YRot(),a.ZRot());
-
-        GACubeMathRepresentation math(mathInfo);
-
-        GACube *object = new GACube(math);
+        //Добавляю в список хранимых на сцене
         m_objects.push_back(object);
+
+        //Генерирую сигнал о том, что добавился новый объект
         emit objectAdded(object);
     }
 }
 
 void GAObjectManager::deleteObject(GACube *object)
 {
-
-    // Удаление объекта из вектора
-    auto it = std::remove(m_objects.begin(), m_objects.end(), object);
-
-    m_objects.erase(it, m_objects.end());
-
+    //Удаление объекта
     delete object;
+
+    //Удаление объекта из вектора
+    auto it = std::remove(m_objects.begin(), m_objects.end(), object);
+    m_objects.erase(it, m_objects.end());   
 }
 
 void GAObjectManager::selectObject(GACube *object)
 {
+    //При выборе объект меняет цвет на зеленый
     object->getGraphicsRepresentation().setColor(Qt::green);
 }
 
 void GAObjectManager::unselectObject(GACube *object)
 {
+    //При отмене выбора цвет объекта меняется на серый
     object->getGraphicsRepresentation().setColor(Qt::gray);
 }
 
+//Сравнение типов необходимое для сортировки
 bool compareByIntersectionType(const std::tuple<GACube*, GACube*, GA::IntersectionType>& a,
                                const std::tuple<GACube*, GACube*, GA::IntersectionType>& b)
 {
@@ -81,7 +67,9 @@ bool compareByIntersectionType(const std::tuple<GACube*, GACube*, GA::Intersecti
 
 void GAObjectManager::showCollisions(std::vector<std::tuple<GACube *, GACube *, GA::IntersectionType>> collisions)
 {
-
+    //Сортирую информацию о коллизиях в зависимости от типа коллизии
+    //Самыми первыми идут пары объектов которые не имеют коллизий между собой
+    //Далее идут пары с коллизиями
     std::sort(collisions.begin(), collisions.end(), compareByIntersectionType);
 
     for(int i = 0; i < collisions.size(); ++i)
@@ -89,8 +77,11 @@ void GAObjectManager::showCollisions(std::vector<std::tuple<GACube *, GACube *, 
         qDebug() <<  std::get<0>(collisions.at(i)) << std::get<1>(collisions.at(i)) << std::get<2>(collisions.at(i));
     }
 
+    //Изменение цвета объекта в зависимости от типа коллизии
     for(size_t i = 0; i < collisions.size(); ++i)
     {
+        //Если в первой паре один из указателей нулевой, то это означает, что на сцене находится один объект
+        //Этот объект окрашивается в желтый цвет
         if(std::get<1>(collisions.at(i)) == nullptr)
         {
             std::get<0>(collisions.at(i))->getGraphicsRepresentation().setColor(Qt::yellow);
@@ -98,24 +89,14 @@ void GAObjectManager::showCollisions(std::vector<std::tuple<GACube *, GACube *, 
         }
         switch(std::get<2>(collisions.at(i)))
         {
+            //При пересечении объектов они окрашиваются в синий
             case GA::IntersectionType::FullIntersection:
             {
                 std::get<0>(collisions.at(i))->getGraphicsRepresentation().setColor(Qt::blue);
                 std::get<1>(collisions.at(i))->getGraphicsRepresentation().setColor(Qt::blue);
                 break;
             }
-            case GA::IntersectionType::PartialIntersection:
-            {
-                std::get<0>(collisions.at(i))->getGraphicsRepresentation().setColor(Qt::cyan);
-                std::get<1>(collisions.at(i))->getGraphicsRepresentation().setColor(Qt::cyan);
-                break;
-            }
-            case GA::IntersectionType::SharedVertex:
-            {
-                std::get<0>(collisions.at(i))->getGraphicsRepresentation().setColor(QColor(170, 130, 140));
-                std::get<1>(collisions.at(i))->getGraphicsRepresentation().setColor(QColor(170, 130, 140));
-                break;
-            }
+            //При отсутствии пересечений объекты окрашиваются в желтый
             case GA::IntersectionType::NoIntersection:
             {
                 std::get<0>(collisions.at(i))->getGraphicsRepresentation().setColor(Qt::yellow);
@@ -124,5 +105,14 @@ void GAObjectManager::showCollisions(std::vector<std::tuple<GACube *, GACube *, 
             }
         }
     }
+}
+
+void GAObjectManager::clearObjects()
+{
+    for(int i = 0; i < m_objects.size(); ++i)
+    {
+        delete m_objects[i];
+    }
+    m_objects.clear();
 }
 

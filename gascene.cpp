@@ -6,7 +6,7 @@ GAScene::GAScene(QWidget *parent)
     : QWidget(parent)
 {
 
-    m_objectManager = new GAObjectManager(m_rootEntity);
+    m_objectManager = new GAObjectManager();
 
     connect(m_objectManager, &GAObjectManager::objectAdded, this, &GAScene::objectAdded);
 
@@ -16,7 +16,7 @@ GAScene::GAScene(QWidget *parent)
 
     GACameraController cameraController;
 
-    cameraController.CreateCamera(m_view,m_rootEntity);
+    cameraController.CreateCamera(m_view);
 
     // Плоскость XY (по умолчанию)
     createTransformedPlane(m_rootEntity, GA::Vector3D(0.0f, 0.0f, 0.0f), GA::Vector3D(10.0f, 0.0f, 0.0f), GA::Vector3D(0.0f, 10.0f, 0.0f), Qt::green);
@@ -33,12 +33,30 @@ GAScene::GAScene(QWidget *parent)
     m_view->setRootEntity(m_rootEntity);
 }
 
-void GAScene::OpenScene(const GA::String &path)
+GAScene::~GAScene()
+{
+    delete m_rootEntity;
+    delete m_objectManager;
+    delete m_view;
+}
+
+GA::Window3D& GAScene::getView()
+{
+    return *m_view;
+}
+
+void GAScene::openScene(const GA::String &path)
 {
     m_objectManager->GenerateObjectsFromFile(path);
 }
 
+void GAScene::clearScene()
+{
+    m_objectManager->clearObjects();
+}
+
 GA::Entity *GAScene::createTransformedPlane(GA::Entity *parent, GA::Vector3D p0, GA::Vector3D p1, GA::Vector3D p3, GA::Color color) {
+
     // Векторы, образующие плоскость
     GA::Vector3D v1 = p1 - p0;
     GA::Vector3D v2 = p3 - p0;
@@ -88,7 +106,7 @@ GA::Entity *GAScene::createTransformedPlane(GA::Entity *parent, GA::Vector3D p0,
     material->setAlpha(.4);
     material->setAmbient(color);
 
-    // И установка компонентов
+    // Установка компонентов
     planeEntity->addComponent(transform);
     planeEntity->addComponent(material);
 
@@ -110,7 +128,7 @@ void GAScene::unselectObject(GACube *object)
     m_objectManager->unselectObject(object);
 }
 
-std::vector<GACube *> GAScene::Objects()
+std::vector<GACube *> GAScene::getObjects()
 {
     return m_objectManager->Objects();
 }
@@ -118,6 +136,11 @@ std::vector<GACube *> GAScene::Objects()
 void GAScene::showCollisions(std::vector<std::tuple<GACube *, GACube *, GA::IntersectionType> > collisions)
 {
     m_objectManager->showCollisions(collisions);
+}
+
+Entity &GAScene::getRoot()
+{
+    return *m_rootEntity;
 }
 
 void GAScene::objectAdded(GACube *object)

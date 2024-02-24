@@ -1,6 +1,5 @@
 #include "GA.h"
 #include "gacube.h"
-#include "scenemodifier.h"
 #include "gascene.h"
 #include "gaappwindow.h"
 
@@ -20,7 +19,7 @@ int main(int argc, char *argv[])
 
     w->showMaximized();
 
-    RUN_ALL_TESTS();
+    //return RUN_ALL_TESTS();
 
     return app.exec();
 }

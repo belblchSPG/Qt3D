@@ -1,5 +1,6 @@
 #ifndef __GACUBEMATHREORESENTATION_H
 #define __GACUBEMATHREORESENTATION_H
+#define _USE_MATH_DEFINES
 
 #include "GA.h"
 
@@ -48,6 +49,34 @@ public:
 
     //Метод возвращает угол поворота параллелепипеда относительно оси Z
     double ZRot() const;
+
+    //Метод возвращает вектор, содержащий единичные векторы, представляющие направление осей у параллелепипеда
+    std::vector<std::vector<double>> CalculateRotationVectors();
+
+    //Метод конвертирует градусы в радианы
+    static double ConvertToRad(double degree);
+
+    //Метод рассчитывает склярное произведение двух векторов
+    static double dotProduct(const std::vector<double>& a, const std::vector<double>& b);
+
+    //Метод рассчитывает векторное произведение двух векторов
+    static std::vector<double> crossProduct(const std::vector<double>& a, const std::vector<double>& b);
+
+    //Метод рассчитывает матрицу поворота параллелепипеда относительно оси X
+    std::vector<std::vector<double>> CalculateRotationMatrixX();
+
+    //Метод рассчитывает матрицу поворота параллелепипеда относительно оси Y
+    std::vector<std::vector<double>> CalculateRotationMatrixY();
+
+    //Метод рассчитывает матрицу поворота параллелепипеда относительно оси Z
+    std::vector<std::vector<double>> CalculateRotationMatrixZ();
+
+    //Метод объединяет матрицы поворота относительно осей X,Y,Z и возвращает полную матрицу поворота для параллелепипеда
+    std::vector<std::vector<double>> CalculateRotationMatrix();
+
+    //Метод принимает две матрицы, перемножает их и возвращает получивщуюся матрицу
+    std::vector<std::vector<double>> MultiplyMatrices(const std::vector<std::vector<double>>& matrix1,
+                                                      const std::vector<std::vector<double>>& matrix2);
 
     //Методы были необходимы для определения коллизий
     //Детектор коллизий не прошел тесты и его нужно будет переписать

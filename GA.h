@@ -8,6 +8,7 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <cmath>
 
 #include <Qt3DCore>
 #include <Qt3DExtras>
@@ -23,6 +24,7 @@
 #include <QFileDialog>
 #include <QMainWindow>
 #include <QToolBar>
+#include <QLabel>
 
 
 namespace GA

@@ -1,5 +1,5 @@
-#ifndef GACOLLISIONDETECTOR_H
-#define GACOLLISIONDETECTOR_H
+#ifndef __GACOLLISIONDETECTOR_H
+#define __GACOLLISIONDETECTOR_H
 
 #include "GA.h"
 #include "gacube.h"
@@ -13,15 +13,28 @@ namespace GA
 class GACollisionDetector
 {
 public:
-    GACollisionDetector();
+
+    GACollisionDetector() = default;
+
+    ~GACollisionDetector() = default;
+
+    //Конструктор копирования
+    GACollisionDetector(const GACollisionDetector& detector) = delete;
+
+    //Оператор присваивания с копированием
+    GACollisionDetector& operator=(const GACollisionDetector& copy) = delete;
+
+    //Оператор присваивания с премещением
+    GACollisionDetector& operator=(GACollisionDetector&& moved) = delete;
+
+    //Метод возвращает список кортежей, в которых хранится информация о пересечении между каждым параллелепипедом на сцене
+    //Кортеж хранит в себе указатели на параллелепипеды и тип пересечения данных параллелепипедов
     std::vector<std::tuple<GACube*,GACube*,GA::IntersectionType>> CollisionDetection(const std::vector<GACube*>&);
 
 private:
 
-    double ProjVector3(GA::Vector3D v, GA::Vector3D a);
-    void ProjAxis(double& min, double& max, const std::vector<GA::Vector3D>& points, const GA::Vector3D& axis);
-    IntersectionType IntersectionOfProj(const std::vector<GA::Vector3D> a, const std::vector<GA::Vector3D> b, const std::vector<GA::Vector3D>& axis);
-    //IntersectionType Collision(GA::GACube* box1, GA::GACube* box2);
+    //Метод принимает два указателя на параллелепипеды и вовзращает тип пересечения между данными объектами
+    GA::IntersectionType CalculateCollision(const GACube& cube1, const GACube& cube2);
 };
 }
-#endif // GACOLLISIONDETECTOR_H
+#endif // __GACOLLISIONDETECTOR_H
