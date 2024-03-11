@@ -20,6 +20,8 @@ GAAppWindow::GAAppWindow(QWidget *parent)
 
     //Подписываюсь на то, что при добавлении нового объекта на сцену будет добавляться соответствующий ему элемент в обозреватель сцены
     connect(m_scene, &GAScene::objectAddedToAppWindow, this, &GAAppWindow::handleObjectAddedInAppWindow);
+
+    this->showMaximized();
 }
 
 GAAppWindow::~GAAppWindow()

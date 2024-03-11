@@ -16,8 +16,6 @@
 #include <QQuaternion>
 #include <Qt3DRender>
 #include <QBuffer>
-#include <QGraphicsOpacityEffect>
-#include <QLineEdit>
 #include <QObject>
 #include <QString>
 #include <QDebug>

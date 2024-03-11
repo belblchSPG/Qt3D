@@ -11,16 +11,19 @@ using namespace GA;
 
 int main(int argc, char *argv[])
 {
-    ::testing::InitGoogleTest(&argc, argv);
+    int result = 0;
 
     QApplication app(argc, argv);
 
     GAAppWindow *w = new GAAppWindow();
 
-    w->showMaximized();
+#ifdef TESTING_MODE
+    ::testing::InitGoogleTest(&argc, argv);
+    result = RUN_ALL_TESTS();
+#else
+    result = app.exec();
+#endif
 
-    //return RUN_ALL_TESTS();
-
-    return app.exec();
+    return result;
 }
 

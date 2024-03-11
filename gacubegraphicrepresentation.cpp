@@ -1,6 +1,5 @@
 #include "gacubegraphicrepresentation.h"
 
-
 GACubeGraphicRepresentation::GACubeGraphicRepresentation(const GACubeMathRepresentation &math) :
     m_mesh(new GA::CuboidMesh),
     m_transform(new GA::Transform),
