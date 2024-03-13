@@ -4,6 +4,7 @@
 #include <memory>
 #include <vector>
 #include <tuple>
+#include <utility>
 #include <algorithm>
 #include <fstream>
 #include <sstream>
@@ -25,6 +26,8 @@
 #include <QLabel>
 
 
+
+
 namespace GA
 {
 
@@ -43,6 +46,7 @@ using Window3D = Qt3DExtras::Qt3DWindow;
 using String = QString;
 using Camera = Qt3DRender::QCamera;
 using OrbitCameraController = Qt3DExtras::QOrbitCameraController;
+using Pair = std::pair<double, double>;
 
 enum IntersectionType : int{
     NoIntersection = 0,
@@ -59,6 +63,8 @@ class GAObjectManager;
 class GAParser;
 class GACameraController;
 class GAAppWindow;
+class GARectangle;
+class GARectangleMathRepresentation;
 }
 
 

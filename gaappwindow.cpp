@@ -77,7 +77,7 @@ QMenuBar& GAAppWindow::generateMenuBar()
 
     connect(runDetectionAction, &QAction::triggered, this, [=](){
         GACollisionDetector detector;
-        m_scene->showCollisions(detector.CollisionDetection(m_scene->getObjects()));
+        m_scene->showCollisions(detector.CollisionDetection3D(m_scene->getObjects()));
     });
 
     return *menuBar;

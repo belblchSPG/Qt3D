@@ -28,6 +28,8 @@ if(BUILD_MODE STREQUAL "Application")
         gaappwindow.h gaappwindow.cpp
         gaparser.h gaparser.cpp
         ga.h
+        garectangle.h garectangle.cpp
+        garectanglemathrepresentation.h garectanglemathrepresentation.cpp
     )
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(Qt3D-Test
@@ -72,9 +74,13 @@ if(BUILD_MODE STREQUAL "Testing")
         gacubemathrepresentation.h gacubemathrepresentation.cpp
         gaappwindow.h gaappwindow.cpp
         gaparser.h gaparser.cpp
+        garectangle.h garectangle.cpp
+        garectanglemathrepresentation.h garectanglemathrepresentation.cpp
         GA.h
         tst_gacube.cpp
         tst_gacubemathrepresentation.cpp
+        tst_collision2D.cpp
+        tst_garectanglemathrepresentation.cpp
     )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

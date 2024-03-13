@@ -1,6 +1,6 @@
 #include "gacollisiondetector.h"
 
-std::vector<std::tuple<GACube*,GACube*,GA::IntersectionType>> GACollisionDetector::CollisionDetection(const std::vector<GACube*>& objects)
+std::vector<std::tuple<GACube*,GACube*,GA::IntersectionType>> GACollisionDetector::CollisionDetection3D(const std::vector<GACube*>& objects)
 {
    //Создаю список, который будет хранить информацию о коллизях
    std::vector<std::tuple<GACube*,GACube*,GA::IntersectionType>> collisions;
@@ -21,7 +21,7 @@ std::vector<std::tuple<GACube*,GACube*,GA::IntersectionType>> GACollisionDetecto
                GACube* c2 = objects[j];
 
                //Информация после каждой проверки добавляется в список
-               collisions.push_back(std::tuple<GA::GACube*,GA::GACube*,GA::IntersectionType>(c1,c2,CalculateCollision(*c1,*c2)));
+               collisions.push_back(std::tuple<GA::GACube*,GA::GACube*,GA::IntersectionType>(c1,c2,CalculateCollision3D(*c1,*c2)));
            }
        }
    }
@@ -29,7 +29,7 @@ std::vector<std::tuple<GACube*,GACube*,GA::IntersectionType>> GACollisionDetecto
    return collisions;
 }
 
-IntersectionType GACollisionDetector::CalculateCollision(const GACube& cube1, const GACube& cube2)
+IntersectionType GACollisionDetector::CalculateCollision3D(const GACube& cube1, const GACube& cube2)
 {
     GA::GACubeMathRepresentation Cube1MathRepresentation = cube1.getMathRepresentation();
     GA::GACubeMathRepresentation Cube2MathRepresentation = cube2.getMathRepresentation();
@@ -333,6 +333,158 @@ IntersectionType GACollisionDetector::CalculateCollision(const GACube& cube1, co
     bool case15 = length > sum;
 
     if(case15) return GA::IntersectionType::NoIntersection;
+
+    return GA::IntersectionType::FullIntersection;
+}
+
+std::vector<std::tuple<GARectangle *, GARectangle *, IntersectionType> > GACollisionDetector::CollisionDetection2D(const std::vector<GARectangle *> &objects)
+{
+    //Создаю список, который будет хранить информацию о коллизях
+    std::vector<std::tuple<GARectangle*,GARectangle*,GA::IntersectionType>> collisions;
+
+    //Если на сцене один объект, то проверки не происходят
+    if(objects.size() == 1)
+    {
+        collisions.push_back(std::tuple<GARectangle*,GARectangle*,GA::IntersectionType>(objects[0],nullptr,GA::IntersectionType::NoIntersection));
+    }
+
+    else
+    {    //Каждый между объект проверяется на коллизии с другим единожды
+        for (size_t i = 0; i < objects.size(); ++i)
+        {
+            for (size_t j = i + 1; j < objects.size(); ++j)
+            {
+                GARectangle* c1 = objects[i];
+                GARectangle* c2 = objects[j];
+
+                //Информация после каждой проверки добавляется в список
+                collisions.push_back(std::tuple<GA::GARectangle*,GA::GARectangle*,GA::IntersectionType>(c1,c2,CalculateCollision2D(*c1,*c2)));
+            }
+        }
+    }
+
+    return collisions;
+}
+
+IntersectionType GACollisionDetector::CalculateCollision2D(const GARectangle &rectangle1, const GARectangle &rectangle2)
+{
+    GA::GARectangleMathRepresentation Rec1MathRepresentation = rectangle1.getMathRepresentation();
+    GA::GARectangleMathRepresentation Rec2MathRepresentation = rectangle2.getMathRepresentation();
+
+    //Получаю координаты центра у параллелепипедов
+    GA::Point Pa = Rec1MathRepresentation.Center();
+    GA::Point Pb = Rec2MathRepresentation.Center();
+
+    //Получаю половины ширины, высоты и длины
+    double Ha = Rec1MathRepresentation.Height() / 2;
+    double Wa = Rec1MathRepresentation.Width() / 2;
+    double Hb = Rec2MathRepresentation.Height() / 2;
+    double Wb = Rec2MathRepresentation.Width() / 2;
+
+    qDebug() << Ha << Wa << Hb << Wb;
+
+    //Получаю матрицы поворота параллелепипедов
+    std::vector<std::vector<double>> rotationVectorsA = Rec1MathRepresentation.CalculateRotationVectors();
+    std::vector<std::vector<double>> rotationVectorsB = Rec2MathRepresentation.CalculateRotationVectors();
+
+    //Получаю единичные векторы осей
+    std::vector<double> Ax = { rotationVectorsA[0][0], rotationVectorsA[0][1] };
+    std::vector<double> Ay = { rotationVectorsA[1][0], rotationVectorsA[1][1] };
+
+    std::vector<double> Bx = { rotationVectorsB[0][0], rotationVectorsB[0][1] };
+    std::vector<double> By = { rotationVectorsB[1][0], rotationVectorsB[1][1] };
+
+    qDebug() << "Получил все единичные векторы";
+
+    //Вычисляю вектор разности центров
+    std::vector<double> T = {abs(Pb[0] - Pa[0]), abs(Pb[1] - Pa[1]), abs(Pb[2] - Pa[2])};
+
+    qDebug() << "Получил разность центров";
+
+    double length;
+    double length1;
+    double length2;
+    double sum;
+    double Rxx = GACubeMathRepresentation::dotProduct(Ax, Bx);
+    double Rxy = GACubeMathRepresentation::dotProduct(Ax, By);
+    double Ryx = GACubeMathRepresentation::dotProduct(Ay, Bx);
+    double Ryy = GACubeMathRepresentation::dotProduct(Ay, By);
+
+    // case 1
+    //  L = Ax
+    //  | T • Ax | > Wa + | Wb * Rxx | + |Hb * Ryx|
+    // length > Wa + length1 + length 2
+
+    length = std::abs(GACubeMathRepresentation::dotProduct(T, Ax));
+
+    length1 = std::abs(Wb * Rxx);
+
+    length2 = std::abs(Hb * Ryx);
+
+    sum = Wa + length1 + length2;
+
+    bool case1 = length > sum;
+
+    if (case1) return GA::IntersectionType::NoIntersection;
+
+    qDebug() << "Кейс 1";
+
+    // case 2 done
+    //  L = Ay
+    //  | T • Ay | > Ha + | Wb * Rxy | + |Hb * Ryy|
+    // length > Ha + length1 + length2
+
+    length = std::abs(GACubeMathRepresentation::dotProduct(T, Ay));
+
+    length1 = std::abs(Wb * Rxy);
+
+    length2 = std::abs(Hb * Ryy);
+
+    sum = Ha + length1 + length2;
+
+    bool case2 = length > sum;
+
+    if (case2) return GA::IntersectionType::NoIntersection;
+
+    qDebug() << "Кейс 1";
+
+    // case 3 done
+    // L = Bx
+    // |T • Bx| > Wb + |Wa*Rxx| + |Ha*Ryx|
+    // length > Wb + length1 + length2
+
+    length = std::abs(GACubeMathRepresentation::dotProduct(T, Bx));
+
+    length1 = std::abs(Wa * Rxx);
+
+    length2 = std::abs(Ha * Ryx);
+
+    sum = Wb + length1 + length2;
+
+    bool case3 = length > sum;
+
+    if (case3) return GA::IntersectionType::NoIntersection;
+
+    qDebug() << "Кейс 3";
+
+    // case 4 done
+    // L = By
+    //  |T • By| > Hb + |Wa*Rxy| + |Ha*Ryy|
+    // length > Wb + length1 + length2
+
+    length = std::abs(GACubeMathRepresentation::dotProduct(T, By));
+
+    length1 = std::abs(Wa * Rxy);
+
+    length2 = std::abs(Ha * Ryy);
+
+    sum = Wb + length1 + length2;
+
+    bool case4 = length > sum;
+
+    if (case4) return GA::IntersectionType::NoIntersection;
+
+    qDebug() << "Кейс 1";
 
     return GA::IntersectionType::FullIntersection;
 }
