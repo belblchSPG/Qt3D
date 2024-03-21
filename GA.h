@@ -13,24 +13,22 @@
 
 #include <Qt3DCore>
 #include <Qt3DExtras>
-#include <QVector3D>
-#include <QQuaternion>
+#include <QtGui>
+#include <qquaternion.h>
 #include <Qt3DRender>
 #include <QBuffer>
 #include <QObject>
-#include <QString>
+#include <qstring.h>
 #include <QDebug>
-#include <QFileDialog>
-#include <QMainWindow>
-#include <QToolBar>
-#include <QLabel>
-
-
-
+#include <QtWidgets/QFileDialog>
+#include <QtWidgets/QMainWindow>
+#include <QtWidgets/QToolBar>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QMenu>
+#include <QtWidgets/QMenuBar>
 
 namespace GA
 {
-
 using Point = QVector3D;
 using Vector = QVector3D;
 using Vector3D = QVector3D;
@@ -68,4 +66,6 @@ class GARectangleMathRepresentation;
 }
 
 
+
 #endif // __GA_H
+    

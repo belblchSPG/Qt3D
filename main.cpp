@@ -1,10 +1,10 @@
 #include "GA.h"
 #include "gacube.h"
 #include "gascene.h"
-#include "gaappwindow.h"
+#include "cd_appwindow.h"
 
-#include <QApplication>
-#include <QMainWindow>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QMainWindow>
 #include <gtest/gtest.h>
 
 using namespace GA;

@@ -1,7 +1,6 @@
-#include <gmock/gmock-matchers.h>
 #include <gtest/gtest.h>
-#include "GA.h"
-#include "gacube.h"
+#include "ga.h"
+#include "cd_cube.h"
 
 using namespace testing;
 using namespace GA;
@@ -9,7 +8,7 @@ using namespace GA;
 TEST(GACube, ValidConstructor1)
 {
     //Создаю информацию для описания параллелепипеда
-    GA::Vector3D info[3] = {GA::Size(1,2,3), GA::Point(4,5,6), GA::Rotation(0,0,0)};
+    GA::Vector3D info[3] = {GA::Size(1.0f,2.0f,3.0f), GA::Point(4.0f,5.0f,6.0f), GA::Rotation(0.0f,0.0f,0.0f)};
     GACubeMathRepresentation mathInfo(info);
 
     //Создаю параллелепипед
@@ -19,7 +18,7 @@ TEST(GACube, ValidConstructor1)
     GA::Vector3D myAnswer(validCube.getMathRepresentation().Width(),
                       validCube.getMathRepresentation().Height(),
                       validCube.getMathRepresentation().Length());
-    GA::Vector3D rightAnswer = {1.0,2.0,3.0};
+    GA::Vector3D rightAnswer = {1.0f,2.0f,3.0f};
 
     EXPECT_EQ(myAnswer, rightAnswer);
 }
@@ -27,7 +26,7 @@ TEST(GACube, ValidConstructor1)
 TEST(GACube, ValidConstructor2)
 {
     //Создаю математическое описание параллелепипеда
-    GA::Vector3D info[3] = {GA::Size(12.234235, 0.24325345, 345.534675458),GA::Point(4,5,6),GA::Rotation(123,-324,34.345)};
+    GA::Vector3D info[3] = {GA::Size(12.234235f, 0.24325345f, 345.534675458f),GA::Point(4.0f,5.0f,6.0f),GA::Rotation(123.0f,-324.0f,34.345f)};
     GACubeMathRepresentation mathInfo(info);
 
     //Создаю параллелепипед
@@ -37,7 +36,7 @@ TEST(GACube, ValidConstructor2)
     GA::Vector3D myAnswer(validCube.getMathRepresentation().Width(),
                       validCube.getMathRepresentation().Height(),
                       validCube.getMathRepresentation().Length());
-    GA::Vector3D rightAnswer = {12.234235, 0.24325345, 345.534675458};
+    GA::Vector3D rightAnswer = {12.234235f, 0.24325345f, 345.534675458f};
 
     EXPECT_EQ(myAnswer, rightAnswer);
 }
@@ -45,7 +44,7 @@ TEST(GACube, ValidConstructor2)
 TEST(GACube, ValidConstructor3)
 {
     //Создаю математическое описание параллелепипеда
-    GA::Vector3D info[3] = {GA::Size(0.0000234,0.42434,17.34634634),GA::Point(4,5,6),GA::Rotation(0,0,0)};
+    GA::Vector3D info[3] = {GA::Size(0.0000234f,0.42434f,17.34634634f),GA::Point(4.0f,5.0f,6.0f),GA::Rotation(0.0f,0.0f,0.0f)};
     GACubeMathRepresentation mathInfo(info);
 
     //Создаю параллелепипед
@@ -55,7 +54,7 @@ TEST(GACube, ValidConstructor3)
     GA::Vector3D myAnswer(validCube.getMathRepresentation().Width(),
                       validCube.getMathRepresentation().Height(),
                       validCube.getMathRepresentation().Length());
-    GA::Vector3D rightAnswer = {0.0000234,0.42434,17.34634634};
+    GA::Vector3D rightAnswer = {0.0000234f,0.42434f,17.34634634f};
 
     EXPECT_EQ(myAnswer, rightAnswer);
 }
@@ -63,7 +62,7 @@ TEST(GACube, ValidConstructor3)
 TEST(GACube, InvalidConstructor1)
 {
     //Создаю информацию для описания параллелепипеда
-    GA::Vector3D info[3] = {GA::Size(0,2,3), GA::Point(-4,5,54), GA::Rotation(0,0,0)};
+    GA::Vector3D info[3] = {GA::Size(0.0f,2.0f,3.0f), GA::Point(-4.0f,5.0f,54.0f), GA::Rotation(0.0f,0.0f,0.0f)};
     GACubeMathRepresentation mathInfo(info);
 
     //Создаю параллелепипед
@@ -79,7 +78,7 @@ TEST(GACube, InvalidConstructor1)
                               invalidCube.getMathRepresentation().YRot(),
                               invalidCube.getMathRepresentation().ZRot());
 
-    GA::Vector3D rightAnswer = {-1.0,-1.0,-1.0};
+    GA::Vector3D rightAnswer = {-1.0f,-1.0f,-1.0f};
 
     EXPECT_EQ(myAnswerDimensions, rightAnswer);
     EXPECT_EQ(myAnswerPoint, rightAnswer);
@@ -89,7 +88,7 @@ TEST(GACube, InvalidConstructor1)
 TEST(GACube, InvalidConstructor2)
 {
     //Создаю информацию для описания параллелепипеда
-    GA::Vector3D info[3] = {GA::Size(0,2,3), GA::Point(-4,5,54), GA::Rotation(0,0,0)};
+    GA::Vector3D info[3] = {GA::Size(0.0f,2.0f,3.0f), GA::Point(-4.0f,5.0f,54.0f), GA::Rotation(0.0f,0.0f,0.0f)};
     GACubeMathRepresentation mathInfo(info);
 
     //Создаю параллелепипед
@@ -105,7 +104,7 @@ TEST(GACube, InvalidConstructor2)
                               invalidCube.getMathRepresentation().YRot(),
                               invalidCube.getMathRepresentation().ZRot());
 
-    GA::Vector3D rightAnswer = {-1.0,-1.0,-1.0};
+    GA::Vector3D rightAnswer = {-1.0f,-1.0f,-1.0f};
 
     EXPECT_EQ(myAnswerDimensions, rightAnswer);
     EXPECT_EQ(myAnswerPoint, rightAnswer);
@@ -115,7 +114,7 @@ TEST(GACube, InvalidConstructor2)
 TEST(GACube, InvalidConstructor3)
 {
     //Создаю информацию для описания параллелепипеда
-    GA::Vector3D info[3] = {GA::Size(1,0,3), GA::Point(74,16,-6), GA::Rotation(24,346,-678)};
+    GA::Vector3D info[3] = {GA::Size(1.0f,0.0f,3.0f), GA::Point(74.0f,16.0f,-6.0f), GA::Rotation(24.0f,346.0f,-678.0f)};
     GACubeMathRepresentation mathInfo(info);
 
     //Создаю параллелепипед
@@ -131,7 +130,7 @@ TEST(GACube, InvalidConstructor3)
                               invalidCube.getMathRepresentation().YRot(),
                               invalidCube.getMathRepresentation().ZRot());
 
-    GA::Vector3D rightAnswer = {-1.0,-1.0,-1.0};
+    GA::Vector3D rightAnswer = {-1.0f,-1.0f,-1.0f};
 
     EXPECT_EQ(myAnswerDimensions, rightAnswer);
     EXPECT_EQ(myAnswerPoint, rightAnswer);
@@ -141,7 +140,7 @@ TEST(GACube, InvalidConstructor3)
 TEST(GACube, InvalidConstructor4)
 {
     //Создаю информацию для описания параллелепипеда
-    GA::Vector3D info[3] = {GA::Size(0.000007,-2,432), GA::Point(12,5,-6), GA::Rotation(0,0,0)};
+    GA::Vector3D info[3] = {GA::Size(0.000007f,-2.0f,432.0f), GA::Point(12.0f,5.0f,-6.0f), GA::Rotation(0.0f,0.0f,0.0f)};
     GACubeMathRepresentation mathInfo(info);
 
     //Создаю параллелепипед
@@ -157,7 +156,7 @@ TEST(GACube, InvalidConstructor4)
                               invalidCube.getMathRepresentation().YRot(),
                               invalidCube.getMathRepresentation().ZRot());
 
-    GA::Vector3D rightAnswer = {-1.0,-1.0,-1.0};
+    GA::Vector3D rightAnswer = {-1.0f,-1.0f,-1.0f};
 
     EXPECT_EQ(myAnswerDimensions, rightAnswer);
     EXPECT_EQ(myAnswerPoint, rightAnswer);
@@ -167,7 +166,7 @@ TEST(GACube, InvalidConstructor4)
 TEST(GACube, InvalidConstructor5)
 {
     //Создаю информацию для описания параллелепипеда
-    GA::Vector3D info[3] = {GA::Size(-1.534534,234,0), GA::Point(353,45,1), GA::Rotation(1230,432,765.56546)};
+    GA::Vector3D info[3] = {GA::Size(-1.534534f,234.0f,0.0f), GA::Point(353.0f,45.0f,1.0f), GA::Rotation(1230.0f,432.0f,765.56546)};
     GACubeMathRepresentation mathInfo(info);
 
     //Создаю параллелепипед
@@ -183,7 +182,7 @@ TEST(GACube, InvalidConstructor5)
                               invalidCube.getMathRepresentation().YRot(),
                               invalidCube.getMathRepresentation().ZRot());
 
-    GA::Vector3D rightAnswer = {-1.0,-1.0,-1.0};
+    GA::Vector3D rightAnswer = {-1.0f,-1.0f,-1.0f};
 
     EXPECT_EQ(myAnswerDimensions, rightAnswer);
     EXPECT_EQ(myAnswerPoint, rightAnswer);
