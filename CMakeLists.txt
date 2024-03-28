@@ -18,69 +18,15 @@ find_package(Qt6 REQUIRED COMPONENTS Widgets 3DCore 3DExtras 3DLogic 3DInput 3DR
 
 set(BUILD_MODE "Testing")
 
-add_subdirectory(googletest)
-
-if(BUILD_MODE STREQUAL "Application")
-    set(PROJECT_SOURCES
-        main.cpp
-        cd_scene.h cd_scene.cpp
-        cd_cube.h cd_cube.cpp
-        cd_cameracontroller.h cd_cameracontroller.cpp
-        cd_collisiondetector.h cd_collisiondetector.cpp
-        cd_objectmanager.h cd_objectmanager.cpp
-        cd_cubegraphicrepresentation.h cd_cubegraphicrepresentation.cpp
-        cd_cubemathrepresentation.h cd_cubemathrepresentation.cpp
-        cd_appwindow.h cd_appwindow.cpp
-        cd_parser.h cd_parser.cpp
-        ga.h
-        cd_rectangle.h cd_rectangle.cpp
-        cd_rectanglemathrepresentation.h cd_rectanglemathrepresentation.cpp
-    )
-endif()
-
 if(BUILD_MODE STREQUAL "Testing")
-
-    add_definitions(-DTESTING_MODE)
-
-    set(PROJECT_SOURCES
-        main.cpp
-        cd_scene.h cd_scene.cpp
-        cd_cube.h cd_cube.cpp
-        cd_cameracontroller.h cd_cameracontroller.cpp
-        cd_collisiondetector.h cd_collisiondetector.cpp
-        cd_objectmanager.h cd_objectmanager.cpp
-        cd_cubegraphicrepresentation.h cd_cubegraphicrepresentation.cpp
-        cd_cubemathrepresentation.h cd_cubemathrepresentation.cpp
-        cd_appwindow.h cd_appwindow.cpp
-        cd_parser.h cd_parser.cpp
-        ga.h
-        cd_rectangle.h cd_rectangle.cpp
-        cd_rectanglemathrepresentation.h cd_rectanglemathrepresentation.cpp
-
-        cd.h
-        cd_detector.h cd_detector.cpp
-        cd_contur.h cd_contur.cpp
-
-        tst_gacube.cpp
-        tst_gacubemathrepresentation.cpp
-        tst_collision2D.cpp
-        tst_garectanglemathrepresentation.cpp
-    )
+    add_subdirectory(tests)
+    add_subdirectory(googletest)
 endif()
 
-add_executable(Qt3DTest
-    ${PROJECT_SOURCES}
-    cd_detector.h cd_detector.cpp
-    cd_contur.h cd_contur.cpp
-    cd.h
-)
+if(BUILD_MODE STREQUAL "DemoApp")
+    add_subdirectory(source)
+endif()
 
-target_link_libraries(Qt3DTest PRIVATE
-    Qt6::Widgets
-    Qt6::3DExtras
-    Qt6::3DLogic
-    Qt6::3DCore
-    Qt6::3DInput
-    Qt6::3DRender
-    GTest::gtest_main
-)
+if(BUILD_MODE STREQUAL "Library")
+    add_subdirectory(library)
+endif()

@@ -1,9 +1,7 @@
 #include <gtest/gtest.h>
-#include "ga.h"
-#include "cd_cubemathrepresentation.h"
+#include "../headers/cd_cubemathrepresentation.h"
 
 using namespace testing;
-using namespace GA;
 
 //calculateRotationMatrixX
 //calculateRotationMatrixX
@@ -12,59 +10,61 @@ using namespace GA;
 //multiplyMatrices
 //calculateRotationVectors
 
-TEST(GACubeMathRepresentation, Center1)
+//Группа тестов проверяет правильно ли функция возвращает координаты центра
+TEST(GACubeCenterFunc, Center1)
 {
     //Создаю информацию для описания параллелепипеда
-    GA::Vector3D info[3] = {GA::Size(45.0f,23.0f,3.435253f), GA::Point(4.0f,5.0f,6.0f), GA::Rotation(-456.0f,56.653464f,0.4352523564f)};
+    Vector3D info[3] = {Size(45.0f,23.0f,3.435253f), Point(4.0f,5.0f,6.0f), Rotation(-456.0f,56.653464f,0.4352523564f)};
     GACubeMathRepresentation math(info);
 
-    GA::Vector myAnswer = math.Center();
+    Vector myAnswer = math.Center();
 
-    GA::Vector3D rightAnswer = {4.0f,5.0f,6.0f};
+    Vector3D rightAnswer = {4.0f,5.0f,6.0f};
 
     EXPECT_EQ(myAnswer, rightAnswer);
 }
-TEST(GACubeMathRepresentation, Center2)
+TEST(GACubeCenterFunc, Center2)
 {
     //Создаю информацию для описания параллелепипеда
-    GA::Vector3D info[3] = {GA::Size(123.6456745f,34.0f,745.0f), GA::Point(-1.466346f, 0.0f, 6.774356f), GA::Rotation(442.0f,50.0f,-70.0f)};
+    Vector3D info[3] = {Size(123.6456745f,34.0f,745.0f), Point(-1.466346f, 0.0f, 6.774356f), Rotation(442.0f,50.0f,-70.0f)};
     GACubeMathRepresentation math(info);
 
-    GA::Vector myAnswer = math.Center();
+    Vector myAnswer = math.Center();
 
-    GA::Vector3D rightAnswer = {-1.466346f, 0.0f, 6.774356f};
+    Vector3D rightAnswer = {-1.466346f, 0.0f, 6.774356f};
 
     EXPECT_EQ(myAnswer, rightAnswer);
 }
-TEST(GACubeMathRepresentation, Center3)
+TEST(GACubeCenterFunc, Center3)
 {
     //Создаю информацию для описания параллелепипеда
-    GA::Vector3D info[3] = {GA::Size(-1.0f,34.0f,34.0f), GA::Point(432.0f, -64.5634f, 1.0f), GA::Rotation(42.0f,53.5664f,456.743f)};
+    Vector3D info[3] = {Size(-1.0f,34.0f,34.0f), Point(432.0f, -64.5634f, 1.0f), Rotation(42.0f,53.5664f,456.743f)};
     GACubeMathRepresentation math(info);
 
-    GA::Vector myAnswer = math.Center();
+    Vector myAnswer = math.Center();
 
-    GA::Vector3D rightAnswer = {-1.0f, -1.0f, -1.0f};
+    Vector3D rightAnswer = {-1.0f, -1.0f, -1.0f};
 
     EXPECT_EQ(myAnswer, rightAnswer);
 }
-TEST(GACubeMathRepresentation, Center4)
+TEST(GACubeCenterFunc, Center4)
 {
     //Создаю информацию для описания параллелепипеда
-    GA::Vector3D info[3] = {GA::Size(-0.00000001f, 0.0000001f, 456.0f), GA::Point(432.0f, -64.5634f, 0.0f), GA::Rotation(42.0f,53.5664f,456.743f)};
+    Vector3D info[3] = {Size(-0.00000001f, 0.0000001f, 456.0f), Point(432.0f, -64.5634f, 0.0f), Rotation(42.0f,53.5664f,456.743f)};
     GACubeMathRepresentation math(info);
 
-    GA::Vector myAnswer = math.Center();
+    Vector myAnswer = math.Center();
 
-    GA::Vector3D rightAnswer = {-1.0f, -1.0f, -1.0f};
+    Vector3D rightAnswer = {-1.0f, -1.0f, -1.0f};
 
     EXPECT_EQ(myAnswer, rightAnswer);
 }
 
-TEST(GACubeMathRepresentation, Width1)
+//Группа тестов проверяет правильно ли функция возвращает ширину объект
+TEST(GACubeWidthFunc, Width1)
 {
     //Создаю информацию для описания параллелепипеда
-    GA::Vector3D info[3] = {GA::Size(45.0f,23.0f,3.435253f), GA::Point(4.0f,5.0f,6.0f), GA::Rotation(-456.0f,56.653464f,0.4352523564f)};
+    Vector3D info[3] = {Size(45.0f,23.0f,3.435253f), Point(4.0f,5.0f,6.0f), Rotation(-456.0f,56.653464f,0.4352523564f)};
     GACubeMathRepresentation math(info);
 
 
@@ -74,24 +74,24 @@ TEST(GACubeMathRepresentation, Width1)
 
     EXPECT_EQ(myAnswer, rightAnswer);
 }
-TEST(GACubeMathRepresentation, Width2)
+TEST(GACubeWidthFunc, Width2)
 {
     //Создаю информацию для описания параллелепипеда
-    GA::Vector3D info[3] = {GA::Size(123.6456745f,34.0f,745.0f), GA::Point(-1.466346f, 0.0f, 6.774356f), GA::Rotation(442.0f,50.0f,-70.0f)};
+    Vector3D info[3] = {Size(123.6456745f,34.0f,745.0f), Point(-1.466346f, 0.0f, 6.774356f), Rotation(442.0f,50.0f,-70.0f)};
     GACubeMathRepresentation math(info);
 
     double myAnswer = math.Width();
 
-    //GA::Size является QVector3D, который хранит в себе float.
+    //Size является QVector3D, который хранит в себе float.
     //При изменении типа rightAnswer на double тест не проходит
     float rightAnswer = 123.6456745f;
 
     EXPECT_EQ(myAnswer, rightAnswer);
 }
-TEST(GACubeMathRepresentation, Width3)
+TEST(GACubeWidthFunc, Width3)
 {
     //Создаю информацию для описания параллелепипеда
-    GA::Vector3D info[3] = {GA::Size(-1.0f,34.0f,34.0f), GA::Point(432.0f, -64.5634f, 1.0f), GA::Rotation(42.0f,53.5664f,456.743f)};
+    Vector3D info[3] = {Size(-1.0f,34.0f,34.0f), Point(432.0f, -64.5634f, 1.0f), Rotation(42.0f,53.5664f,456.743f)};
     GACubeMathRepresentation math(info);
 
     double myAnswer = math.Width();
@@ -100,10 +100,10 @@ TEST(GACubeMathRepresentation, Width3)
 
     EXPECT_EQ(myAnswer, rightAnswer);
 }
-TEST(GACubeMathRepresentation, Width4)
+TEST(GACubeWidthFunc, Width4)
 {
     //Создаю информацию для описания параллелепипеда
-    GA::Vector3D info[3] = {GA::Size(-0.00000001f, 0.0000001f, 456.0f), GA::Point(432.0f, -64.5634f, 0.0f), GA::Rotation(42.0f,53.5664f,456.743f)};
+    Vector3D info[3] = {Size(-0.00000001f, 0.0000001f, 456.0f), Point(432.0f, -64.5634f, 0.0f), Rotation(42.0f,53.5664f,456.743f)};
     GACubeMathRepresentation math(info);
 
     double myAnswer = math.Width();
@@ -113,10 +113,11 @@ TEST(GACubeMathRepresentation, Width4)
     EXPECT_EQ(myAnswer, rightAnswer);
 }
 
-TEST(GACubeMathRepresentation, Height1)
+//Группа тестов проверяет правильно ли функция возвращает высоту объект
+TEST(GACubeHeightFunc, Height1)
 {
     //Создаю информацию для описания параллелепипеда
-    GA::Vector3D info[3] = {GA::Size(45.0f,23.0f,3.435253f), GA::Point(4.0f,5.0f,6.0f), GA::Rotation(-456.0f,56.653464f,0.4352523564f)};
+    Vector3D info[3] = {Size(45.0f,23.0f,3.435253f), Point(4.0f,5.0f,6.0f), Rotation(-456.0f,56.653464f,0.4352523564f)};
     GACubeMathRepresentation math(info);
 
     double myAnswer = math.Height();
@@ -125,10 +126,10 @@ TEST(GACubeMathRepresentation, Height1)
 
     EXPECT_EQ(myAnswer, rightAnswer);
 }
-TEST(GACubeMathRepresentation, Height2)
+TEST(GACubeHeightFunc, Height2)
 {
     //Создаю информацию для описания параллелепипеда
-    GA::Vector3D info[3] = {GA::Size(123.6456745f,34.0f,745.0f), GA::Point(-1.466346f, 0.0f, 6.774356f), GA::Rotation(442.0f,50.0f,-70.0f)};
+    Vector3D info[3] = {Size(123.6456745f,34.0f,745.0f), Point(-1.466346f, 0.0f, 6.774356f), Rotation(442.0f,50.0f,-70.0f)};
     GACubeMathRepresentation math(info);
 
     double myAnswer = math.Height();
@@ -137,10 +138,10 @@ TEST(GACubeMathRepresentation, Height2)
 
     EXPECT_EQ(myAnswer, rightAnswer);
 }
-TEST(GACubeMathRepresentation, Height3)
+TEST(GACubeHeightFunc, Height3)
 {
     //Создаю информацию для описания параллелепипеда
-    GA::Vector3D info[3] = {GA::Size(-1.0f,34.0f,34.0f), GA::Point(432.0f, -64.5634f, 1.0f), GA::Rotation(42.0f,53.5664f,456.743f)};
+    Vector3D info[3] = {Size(-1.0f,34.0f,34.0f), Point(432.0f, -64.5634f, 1.0f), Rotation(42.0f,53.5664f,456.743f)};
     GACubeMathRepresentation math(info);
 
     double myAnswer = math.Height();
@@ -149,10 +150,10 @@ TEST(GACubeMathRepresentation, Height3)
 
     EXPECT_EQ(myAnswer, rightAnswer);
 }
-TEST(GACubeMathRepresentation, Height4)
+TEST(GACubeHeightFunc, Height4)
 {
     //Создаю информацию для описания параллелепипеда
-    GA::Vector3D info[3] = {GA::Size(-0.00000001f, 0.0000001f, 456.0f), GA::Point(432.0f, -64.5634f, 0.0f), GA::Rotation(42.0f,53.5664f,456.743f)};
+    Vector3D info[3] = {Size(-0.00000001f, 0.0000001f, 456.0f), Point(432.0f, -64.5634f, 0.0f), Rotation(42.0f,53.5664f,456.743f)};
     GACubeMathRepresentation math(info);
 
     double myAnswer = math.Height();
@@ -162,24 +163,25 @@ TEST(GACubeMathRepresentation, Height4)
     EXPECT_EQ(myAnswer, rightAnswer);
 }
 
-TEST(GACubeMathRepresentation, Length1)
+//Группа тестов проверяет правильно ли функция возвращает длину объект
+TEST(GACubeLengthFunc, Length1)
 {
     //Создаю информацию для описания параллелепипеда
-    GA::Vector3D info[3] = {GA::Size(45.0f,23.0f,3.435253f), GA::Point(4.0f,5.0f,6.0f), GA::Rotation(-456.0f,56.653464f,0.4352523564f)};
+    Vector3D info[3] = {Size(45.0f,23.0f,3.435253f), Point(4.0f,5.0f,6.0f), Rotation(-456.0f,56.653464f,0.4352523564f)};
     GACubeMathRepresentation math(info);
 
     double myAnswer = math.Length();
 
-    //GA::Size является QVector3D, который хранит в себе float.
+    //Size является QVector3D, который хранит в себе float.
     //При изменении типа rightAnswer на double тест не проходит
     float rightAnswer = 3.435253f;
 
     EXPECT_EQ(myAnswer, rightAnswer);
 }
-TEST(GACubeMathRepresentation, Length2)
+TEST(GACubeLengthFunc, Length2)
 {
     //Создаю информацию для описания параллелепипеда
-    GA::Vector3D info[3] = {GA::Size(123.6456745f,34.0f,745.0f), GA::Point(-1.466346f, 0.0f, 6.774356f), GA::Rotation(442.0f,50.0f,-70.0f)};
+    Vector3D info[3] = {Size(123.6456745f,34.0f,745.0f), Point(-1.466346f, 0.0f, 6.774356f), Rotation(442.0f,50.0f,-70.0f)};
     GACubeMathRepresentation math(info);
 
     double myAnswer = math.Length();
@@ -188,10 +190,10 @@ TEST(GACubeMathRepresentation, Length2)
 
     EXPECT_EQ(myAnswer, rightAnswer);
 }
-TEST(GACubeMathRepresentation, Length3)
+TEST(GACubeLengthFunc, Length3)
 {
     //Создаю информацию для описания параллелепипеда
-    GA::Vector3D info[3] = {GA::Size(-1.0f,34.0f,34.0f), GA::Point(432.0f, -64.5634f, 1.0f), GA::Rotation(42.0f,53.5664f,456.743f)};
+    Vector3D info[3] = {Size(-1.0f,34.0f,34.0f), Point(432.0f, -64.5634f, 1.0f), Rotation(42.0f,53.5664f,456.743f)};
     GACubeMathRepresentation math(info);
 
     double myAnswer = math.Length();
@@ -200,10 +202,10 @@ TEST(GACubeMathRepresentation, Length3)
 
     EXPECT_EQ(myAnswer, rightAnswer);
 }
-TEST(GACubeMathRepresentation, Length4)
+TEST(GACubeLengthFunc, Length4)
 {
     //Создаю информацию для описания параллелепипеда
-    GA::Vector3D info[3] = {GA::Size(-0.00000001f, 0.0000001f, 456.0f), GA::Point(432.0f, -64.5634f, 0.0f), GA::Rotation(42.0f,53.5664f,456.743f)};
+    Vector3D info[3] = {Size(-0.00000001f, 0.0000001f, 456.0f), Point(432.0f, -64.5634f, 0.0f), Rotation(42.0f,53.5664f,456.743f)};
     GACubeMathRepresentation math(info);
 
     double myAnswer = math.Length();
@@ -213,10 +215,11 @@ TEST(GACubeMathRepresentation, Length4)
     EXPECT_EQ(myAnswer, rightAnswer);
 }
 
-TEST(GACubeMathRepresentation, XRot1)
+//Группа тестов проверяет правильно ли функция возвращает поворот объект по оси X
+TEST(MathZRotXunc, XRot1)
 {
     //Создаю информацию для описания параллелепипеда
-    GA::Vector3D info[3] = {GA::Size(45.0f,23.0f,3.435253f), GA::Point(4.0f,5.0f,6.0f), GA::Rotation(-456.0f,56.653464f,0.4352523564f)};
+    Vector3D info[3] = {Size(45.0f,23.0f,3.435253f), Point(4.0f,5.0f,6.0f), Rotation(-456.0f,56.653464f,0.4352523564f)};
     GACubeMathRepresentation math(info);
 
     double myAnswer = math.XRot();
@@ -225,23 +228,23 @@ TEST(GACubeMathRepresentation, XRot1)
 
     EXPECT_EQ(myAnswer, rightAnswer);
 }
-TEST(GACubeMathRepresentation, XRot2)
+TEST(MathZRotXunc, XRot2)
 {
     //Создаю информацию для описания параллелепипеда
-    GA::Vector3D info[3] = {GA::Size(123.6456745f,34.0f,745.0f), GA::Point(-1.466346f, 0.0f, 6.774356f), GA::Rotation(442.0f,50.0f,-70.0f)};
+    Vector3D info[3] = {Size(123.6456745f,34.0f,745.0f), Point(-1.466346f, 0.0f, 6.774356f), Rotation(442.0f,50.0f,-70.0f)};
     GACubeMathRepresentation math(info);
 
     double myAnswer = math.XRot();
-    //GA::Rotation является QVector3D, который хранит в себе float.
+    //Rotation является QVector3D, который хранит в себе float.
     //При изменении типа rightAnswer на double тест не проходит
-    float rightAnswer = 442.54645f;
+    float rightAnswer = 442.0f;
 
     EXPECT_EQ(myAnswer, rightAnswer);
 }
-TEST(GACubeMathRepresentation, XRot3)
+TEST(MathZRotXunc, XRot3)
 {
     //Создаю информацию для описания параллелепипеда
-    GA::Vector3D info[3] = {GA::Size(-1.0f,34.0f,34.0f), GA::Point(432.0f, -64.5634f, 1.0f), GA::Rotation(42.0f,53.5664f,456.743f)};
+    Vector3D info[3] = {Size(-1.0f,34.0f,34.0f), Point(432.0f, -64.5634f, 1.0f), Rotation(42.0f,53.5664f,456.743f)};
     GACubeMathRepresentation math(info);
 
     double myAnswer = math.XRot();
@@ -250,10 +253,10 @@ TEST(GACubeMathRepresentation, XRot3)
 
     EXPECT_EQ(myAnswer, rightAnswer);
 }
-TEST(GACubeMathRepresentation, XRot4)
+TEST(MathZRotXunc, XRot4)
 {
     //Создаю информацию для описания параллелепипеда
-    GA::Vector3D info[3] = {GA::Size(-0.00000001f, 0.0000001f, 456.0f), GA::Point(432.0f, -64.5634f, 0.0f), GA::Rotation(42.0f,53.5664f,456.743f)};
+    Vector3D info[3] = {Size(-0.00000001f, 0.0000001f, 456.0f), Point(432.0f, -64.5634f, 0.0f), Rotation(42.0f,53.5664f,456.743f)};
     GACubeMathRepresentation math(info);
 
     double myAnswer = math.XRot();
@@ -263,23 +266,24 @@ TEST(GACubeMathRepresentation, XRot4)
     EXPECT_EQ(myAnswer, rightAnswer);
 }
 
-TEST(GACubeMathRepresentation, YRot1)
+//Группа тестов проверяет правильно ли функция возвращает поворот объект по оси Y
+TEST(MathYRotFunc, YRot1)
 {
     //Создаю информацию для описания параллелепипеда
-    GA::Vector3D info[3] = {GA::Size(45.0f,23.0f,3.435253f), GA::Point(4.0f,5.0f,6.0f), GA::Rotation(-456.0f,56.653464f,0.4352523564f)};
+    Vector3D info[3] = {Size(45.0f,23.0f,3.435253f), Point(4.0f,5.0f,6.0f), Rotation(-456.0f,56.653464f,0.4352523564f)};
     GACubeMathRepresentation math(info);
 
     double myAnswer = math.YRot();
-    //GA::Rotation является QVector3D, который хранит в себе float.
+    //Rotation является QVector3D, который хранит в себе float.
     //При изменении типа rightAnswer на double тест не проходит
     float rightAnswer = 56.653464f;
 
     EXPECT_EQ(myAnswer, rightAnswer);
 }
-TEST(GACubeMathRepresentation, YRot2)
+TEST(MathYRotFunc, YRot2)
 {
     //Создаю информацию для описания параллелепипеда
-    GA::Vector3D info[3] = {GA::Size(123.6456745f,34.0f,745.0f), GA::Point(-1.466346f, 0.0f, 6.774356f), GA::Rotation(442.0f,50.0f,-70.0f)};
+    Vector3D info[3] = {Size(123.6456745f,34.0f,745.0f), Point(-1.466346f, 0.0f, 6.774356f), Rotation(442.0f,50.0f,-70.0f)};
     GACubeMathRepresentation math(info);
 
     double myAnswer = math.YRot();
@@ -288,10 +292,10 @@ TEST(GACubeMathRepresentation, YRot2)
 
     EXPECT_EQ(myAnswer, rightAnswer);
 }
-TEST(GACubeMathRepresentation, YRot3)
+TEST(MathYRotFunc, YRot3)
 {
     //Создаю информацию для описания параллелепипеда
-    GA::Vector3D info[3] = {GA::Size(-1.0f,34.0f,34.0f), GA::Point(432.0f, -64.5634f, 1.0f), GA::Rotation(42.0f,53.5664f,456.743f)};
+    Vector3D info[3] = {Size(-1.0f,34.0f,34.0f), Point(432.0f, -64.5634f, 1.0f), Rotation(42.0f,53.5664f,456.743f)};
     GACubeMathRepresentation math(info);
 
     double myAnswer = math.YRot();
@@ -300,10 +304,10 @@ TEST(GACubeMathRepresentation, YRot3)
 
     EXPECT_EQ(myAnswer, rightAnswer);
 }
-TEST(GACubeMathRepresentation, YRot4)
+TEST(MathYRotFunc, YRot4)
 {
     //Создаю информацию для описания параллелепипеда
-    GA::Vector3D info[3] = {GA::Size(-0.00000001f, 0.0000001f, 456.0f), GA::Point(432.0f, -64.5634f, 0.0f), GA::Rotation(42.0f,53.5664f,456.743f)};
+    Vector3D info[3] = {Size(-0.00000001f, 0.0000001f, 456.0f), Point(432.0f, -64.5634f, 0.0f), Rotation(42.0f,53.5664f,456.743f)};
     GACubeMathRepresentation math(info);
 
     double myAnswer = math.YRot();
@@ -313,24 +317,25 @@ TEST(GACubeMathRepresentation, YRot4)
     EXPECT_EQ(myAnswer, rightAnswer);
 }
 
-TEST(GACubeMathRepresentation, ZRot1)
+//Группа тестов проверяет правильно ли функция возвращает поворот объект по оси Z
+TEST(MathZRotFunc, ZRot1)
 {
     //Создаю информацию для описания параллелепипеда
-    GA::Vector3D info[3] = {GA::Size(45.0f,23.0f,3.435253f), GA::Point(4.0f,5.0f,6.0f), GA::Rotation(-456.0f,56.653464f,0.4352523564f)};
+    Vector3D info[3] = {Size(45.0f,23.0f,3.435253f), Point(4.0f,5.0f,6.0f), Rotation(-456.0f,56.653464f,0.4352523564f)};
     GACubeMathRepresentation math(info);
 
     double myAnswer = math.ZRot();
 
-    //GA::Rotationявляется QVector3D, который хранит в себе float.
+    //Rotationявляется QVector3D, который хранит в себе float.
     //При изменении типа rightAnswer на double тест не проходит
     float rightAnswer = 0.4352523564f;
 
     EXPECT_EQ(myAnswer, rightAnswer);
 }
-TEST(GACubeMathRepresentation, ZRot2)
+TEST(MathZRotFunc, ZRot2)
 {
     //Создаю информацию для описания параллелепипеда
-    GA::Vector3D info[3] = {GA::Size(123.6456745f,34.0f,745.0f), GA::Point(-1.466346f, 0.0f, 6.774356f), GA::Rotation(442.0f,50.0f,-70.0f)};
+    Vector3D info[3] = {Size(123.6456745f,34.0f,745.0f), Point(-1.466346f, 0.0f, 6.774356f), Rotation(442.0f,50.0f,-70.0f)};
     GACubeMathRepresentation math(info);
 
     double myAnswer = math.ZRot();
@@ -339,10 +344,10 @@ TEST(GACubeMathRepresentation, ZRot2)
 
     EXPECT_EQ(myAnswer, rightAnswer);
 }
-TEST(GACubeMathRepresentation, ZRot3)
+TEST(MathZRotFunc, ZRot3)
 {
     //Создаю информацию для описания параллелепипеда
-    GA::Vector3D info[3] = {GA::Size(-1.0f,34.0f,34.0f), GA::Point(432.0f, -64.5634f, 1.0f), GA::Rotation(42.0f,53.5664f,456.743f)};
+    Vector3D info[3] = {Size(-1.0f,34.0f,34.0f), Point(432.0f, -64.5634f, 1.0f), Rotation(42.0f,53.5664f,456.743f)};
     GACubeMathRepresentation math(info);
 
     double myAnswer = math.ZRot();
@@ -351,10 +356,10 @@ TEST(GACubeMathRepresentation, ZRot3)
 
     EXPECT_EQ(myAnswer, rightAnswer);
 }
-TEST(GACubeMathRepresentation, ZRot4)
+TEST(MathZRotFunc, ZRot4)
 {
     //Создаю информацию для описания параллелепипеда
-    GA::Vector3D info[3] = {GA::Size(-0.00000001f, 0.0000001f, 456.0f), GA::Point(432.0f, -64.5634f, 0.0f), GA::Rotation(42.0f,53.5664f,456.743f)};
+    Vector3D info[3] = {Size(-0.00000001f, 0.0000001f, 456.0f), Point(432.0f, -64.5634f, 0.0f), Rotation(42.0f,53.5664f,456.743f)};
     GACubeMathRepresentation math(info);
 
     double myAnswer = math.ZRot();
@@ -364,7 +369,8 @@ TEST(GACubeMathRepresentation, ZRot4)
     EXPECT_EQ(myAnswer, rightAnswer);
 }
 
-TEST(GACubeMathRepresentation, convertToRad1)
+//Группа тестов проверяет правильно ли функция конвертирует угол в радианы
+TEST(MathConvertToRadFunc, convertToRad1)
 {
     double angleInDegrees = 0;
 
@@ -374,7 +380,7 @@ TEST(GACubeMathRepresentation, convertToRad1)
 
     EXPECT_EQ(angleInRad, rightAnswer);
 }
-TEST(GACubeMathRepresentation, convertToRad2)
+TEST(MathConvertToRadFunc, convertToRad2)
 {
     double angleInDegrees = -56;
 
@@ -384,7 +390,7 @@ TEST(GACubeMathRepresentation, convertToRad2)
 
     EXPECT_EQ(angleInRad, rightAnswer);
 }
-TEST(GACubeMathRepresentation, convertToRad3)
+TEST(MathConvertToRadFunc, convertToRad3)
 {
     double angleInDegrees = 764.5457;
 
@@ -394,7 +400,7 @@ TEST(GACubeMathRepresentation, convertToRad3)
 
     EXPECT_EQ(angleInRad, rightAnswer);
 }
-TEST(GACubeMathRepresentation, convertToRad4)
+TEST(MathConvertToRadFunc, convertToRad4)
 {
     double angleInDegrees = 0.5464;
 
@@ -404,7 +410,7 @@ TEST(GACubeMathRepresentation, convertToRad4)
 
     EXPECT_EQ(angleInRad, rightAnswer);
 }
-TEST(GACubeMathRepresentation, convertToRad5)
+TEST(MathConvertToRadFunc, convertToRad5)
 {
     double angleInDegrees = 124534262;
 
@@ -414,7 +420,7 @@ TEST(GACubeMathRepresentation, convertToRad5)
 
     EXPECT_EQ(angleInRad, rightAnswer);
 }
-TEST(GACubeMathRepresentation, convertToRad6)
+TEST(MathConvertToRadFunc, convertToRad6)
 {
     double angleInDegrees = -85684733;
 
@@ -425,224 +431,226 @@ TEST(GACubeMathRepresentation, convertToRad6)
     EXPECT_EQ(angleInRad, rightAnswer);
 }
 
-TEST(GACubeMathRepresentation, crossProduct1)
+//Группа тестов проверяет правильно ли функция расчитывает векторное произведение двух векторов
+TEST(MathCrossProductFunc, TwoVectors1)
 {
     std::vector<double> vec1 = {23.563, 25.78679, 645.567000867};
     std::vector<double> vec2 = {0,0,0};
 
-    std::vector<double> cross = GACubeMathRepresentation::crossProduct(vec1,vec2);
+    std::vector<double> Cross = GACubeMathRepresentation::CrossProduct(vec1,vec2);
 
     std::vector<double> rightAnswer = {0, 0, 0};
 
-    EXPECT_EQ(cross, rightAnswer);
+    EXPECT_EQ(Cross, rightAnswer);
 }
-TEST(GACubeMathRepresentation, crossProduct2)
+TEST(MathCrossProductFunc, TwoVectors2)
 {
     std::vector<double> vec1 = {0,0,0};
     std::vector<double> vec2 = {12423423,-24.4646,1763364};
 
-    std::vector<double> cross = GACubeMathRepresentation::crossProduct(vec1,vec2);
+    std::vector<double> Cross = GACubeMathRepresentation::CrossProduct(vec1,vec2);
 
     std::vector<double> rightAnswer = {0,0,0};
 
-    EXPECT_EQ(cross, rightAnswer);
+    EXPECT_EQ(Cross, rightAnswer);
 }
-TEST(GACubeMathRepresentation, crossProduct3)
+TEST(MathCrossProductFunc, TwoVectors3)
 {
     std::vector<double> vec1 = {1,2,3};
     std::vector<double> vec2 = {10,20,30};
 
-    std::vector<double> cross = GACubeMathRepresentation::crossProduct(vec1,vec2);
+    std::vector<double> Cross = GACubeMathRepresentation::CrossProduct(vec1,vec2);
 
     std::vector<double> rightAnswer = {0, 0, 0};
 
-    EXPECT_EQ(cross, rightAnswer);
+    EXPECT_EQ(Cross, rightAnswer);
 }
-TEST(GACubeMathRepresentation, crossProduct4)
+TEST(MathCrossProductFunc, TwoVectors4)
 {
     std::vector<double> vec1 = {-3,-8,-0.2};
     std::vector<double> vec2 = {-15,-40, -1};
 
-    std::vector<double> cross = GACubeMathRepresentation::crossProduct(vec1,vec2);
+    std::vector<double> Cross = GACubeMathRepresentation::CrossProduct(vec1,vec2);
 
     std::vector<double> rightAnswer = {0, 0, 0};
 
-    EXPECT_EQ(cross, rightAnswer);
+    EXPECT_EQ(Cross, rightAnswer);
 };
-TEST(GACubeMathRepresentation, crossProduct5)
+TEST(MathCrossProductFunc, TwoVectors5)
 {
     std::vector<double> vec1 = {1,0,0};
     std::vector<double> vec2 = {0,1,0};
 
-    std::vector<double> cross = GACubeMathRepresentation::crossProduct(vec1,vec2);
+    std::vector<double> Cross = GACubeMathRepresentation::CrossProduct(vec1,vec2);
 
     std::vector<double> rightAnswer = {0,0,1};
 
-    EXPECT_EQ(cross, rightAnswer);
+    EXPECT_EQ(Cross, rightAnswer);
 }
-TEST(GACubeMathRepresentation, crossProduct6)
+TEST(MathCrossProductFunc, TwoVectors6)
 {
     std::vector<double> vec1 = {0,12.25,0};
     std::vector<double> vec2 = {0,0,12.7456};
 
-    std::vector<double> cross = GACubeMathRepresentation::crossProduct(vec1,vec2);
+    std::vector<double> Cross = GACubeMathRepresentation::CrossProduct(vec1,vec2);
 
     std::vector<double> rightAnswer = {156.1336, 0, 0};
 
-    EXPECT_EQ(cross, rightAnswer);
+    EXPECT_EQ(Cross, rightAnswer);
 }
-TEST(GACubeMathRepresentation, crossProduct7)
+TEST(MathCrossProductFunc, TwoVectors7)
 {
     std::vector<double> vec1 = {12,28,-6};
     std::vector<double> vec2 = {11,65,0};
 
-    std::vector<double> cross = GACubeMathRepresentation::crossProduct(vec1,vec2);
+    std::vector<double> Cross = GACubeMathRepresentation::CrossProduct(vec1,vec2);
 
     std::vector<double> rightAnswer = {390, -66, 472};
 
-    EXPECT_EQ(cross, rightAnswer);
+    EXPECT_EQ(Cross, rightAnswer);
 }
-TEST(GACubeMathRepresentation, crossProduct8)
+TEST(MathCrossProductFunc, TwoVectors8)
 {
     std::vector<double> vec1 = {11,65,0};
     std::vector<double> vec2 = {12,28,-6};
 
-    std::vector<double> cross = GACubeMathRepresentation::crossProduct(vec1,vec2);
+    std::vector<double> Cross = GACubeMathRepresentation::CrossProduct(vec1,vec2);
 
     std::vector<double> rightAnswer = {-390, 66, -472};
 
-    EXPECT_EQ(cross, rightAnswer);
+    EXPECT_EQ(Cross, rightAnswer);
 }
-TEST(GACubeMathRepresentation, crossProduct9)
+TEST(MathCrossProductFunc, TwoVectors9)
 {
     std::vector<double> vec1 = {324.56456,455.3241,0.542353};
     std::vector<double> vec2 = {-1.546456,53464,-57.564};
 
-    std::vector<double> cross = GACubeMathRepresentation::crossProduct(vec1,vec2);
+    std::vector<double> Cross = GACubeMathRepresentation::CrossProduct(vec1,vec2);
 
     std::vector<double> rightAnswer = {-55206.6372844, 18682.395606789029, 17353223.774526387};
 
-    EXPECT_EQ(cross, rightAnswer);
+    EXPECT_EQ(Cross, rightAnswer);
 }
-TEST(GACubeMathRepresentation, crossProduct10)
+TEST(MathCrossProductFunc, TwoVectors10)
 {
     std::vector<double> vec1 = {0.677658458,-0.5324523632,-0.00063456};
     std::vector<double> vec2 = {-2.45645745,1.45754685,-0.65865};
 
-    std::vector<double> cross = GACubeMathRepresentation::crossProduct(vec1,vec2);
+    std::vector<double> Cross = GACubeMathRepresentation::CrossProduct(vec1,vec2);
 
     std::vector<double> rightAnswer = {0.35162464995081599,  0.44789851300117195, -0.32022762351898837};
 
-    EXPECT_EQ(cross, rightAnswer);
+    EXPECT_EQ(Cross, rightAnswer);
 }
 
-TEST(GACubeMathRepresentation, dotProduct1)
+//Группа тестов проверяет правильно ли функция просчитывает скалярное произведение двух векторов
+TEST(MathDotProductFunc, DotProduct1)
 {
     std::vector<double> vec1 = {23.563, 25.78679, 645.567000867};
     std::vector<double> vec2 = {0,0,0};
 
-    double dot = GACubeMathRepresentation::dotProduct(vec1,vec2);
+    double Dot = GACubeMathRepresentation::DotProduct(vec1,vec2);
 
     double rightAnswer = 0;
 
-    EXPECT_EQ(dot, rightAnswer);
+    EXPECT_EQ(Dot, rightAnswer);
 }
-TEST(GACubeMathRepresentation, dotProduct2)
+TEST(MathDotProductFunc, DotProduct2)
 {
     std::vector<double> vec1 = {0,0,0};
     std::vector<double> vec2 = {12423423,-24.4646,1763364};
 
-    double dot = GACubeMathRepresentation::dotProduct(vec1,vec2);
+    double Dot = GACubeMathRepresentation::DotProduct(vec1,vec2);
 
     double rightAnswer = 0;
 
-    EXPECT_EQ(dot, rightAnswer);
+    EXPECT_EQ(Dot, rightAnswer);
 }
-TEST(GACubeMathRepresentation, dotProduct3)
+TEST(MathDotProductFunc, DotProduct3)
 {
     std::vector<double> vec1 = {1,2,3};
     std::vector<double> vec2 = {10,20,30};
 
-    double dot = GACubeMathRepresentation::dotProduct(vec1,vec2);
+    double Dot = GACubeMathRepresentation::DotProduct(vec1,vec2);
 
     double rightAnswer = 140;
 
-    EXPECT_EQ(dot, rightAnswer);
+    EXPECT_EQ(Dot, rightAnswer);
 }
-TEST(GACubeMathRepresentation, dotProduct4)
+TEST(MathDotProductFunc, DotProduct4)
 {
     std::vector<double> vec1 = {-3,-8,-0.2};
     std::vector<double> vec2 = {-15,-40, -1};
 
-    double dot = GACubeMathRepresentation::dotProduct(vec1,vec2);
+    double Dot = GACubeMathRepresentation::DotProduct(vec1,vec2);
 
     double rightAnswer = 365.2;
 
-    EXPECT_EQ(dot, rightAnswer);
+    EXPECT_EQ(Dot, rightAnswer);
 }
-TEST(GACubeMathRepresentation, dotProduct5)
+TEST(MathDotProductFunc, DotProduct5)
 {
     std::vector<double> vec1 = {1,0,0};
     std::vector<double> vec2 = {0,1,0};
 
-    double dot = GACubeMathRepresentation::dotProduct(vec1,vec2);
+    double Dot = GACubeMathRepresentation::DotProduct(vec1,vec2);
 
     double rightAnswer = 0;
 
-    EXPECT_EQ(dot, rightAnswer);
+    EXPECT_EQ(Dot, rightAnswer);
 }
-TEST(GACubeMathRepresentation, dotProduct6)
+TEST(MathDotProductFunc, DotProduct6)
 {
     std::vector<double> vec1 = {0,12.25,0};
     std::vector<double> vec2 = {0,12.7456,0};
 
-    double dot = GACubeMathRepresentation::dotProduct(vec1,vec2);
+    double Dot = GACubeMathRepresentation::DotProduct(vec1,vec2);
 
     double rightAnswer = 156.1336;
 
-    EXPECT_EQ(dot, rightAnswer);
+    EXPECT_EQ(Dot, rightAnswer);
 }
-TEST(GACubeMathRepresentation, dotProduct7)
+TEST(MathDotProductFunc, DotProduct7)
 {
     std::vector<double> vec1 = {12,28,-6};
     std::vector<double> vec2 = {11,65,0};
 
-    double dot = GACubeMathRepresentation::dotProduct(vec1,vec2);
+    double Dot = GACubeMathRepresentation::DotProduct(vec1,vec2);
 
     double rightAnswer = 1952;
 
-    EXPECT_EQ(dot, rightAnswer);
+    EXPECT_EQ(Dot, rightAnswer);
 }
-TEST(GACubeMathRepresentation, dotProduct8)
+TEST(MathDotProductFunc, DotProduct8)
 {
     std::vector<double> vec1 = {11,65,0};
     std::vector<double> vec2 = {12,28,-6};
 
-    double dot = GACubeMathRepresentation::dotProduct(vec1,vec2);
+    double Dot = GACubeMathRepresentation::DotProduct(vec1,vec2);
 
     double rightAnswer = 1952;
 
-    EXPECT_EQ(dot, rightAnswer);
+    EXPECT_EQ(Dot, rightAnswer);
 }
-TEST(GACubeMathRepresentation, dotProduct9)
+TEST(MathDotProductFunc, DotProduct9)
 {
     std::vector<double> vec1 = {324.56456,455.3241,0.542353};
     std::vector<double> vec2 = {-1.546456,53464,-57.564};
 
-    double dot = GACubeMathRepresentation::dotProduct(vec1,vec2);
+    double Dot = GACubeMathRepresentation::DotProduct(vec1,vec2);
 
     double rightAnswer = 24342914.537580710;
 
-    EXPECT_EQ(dot, rightAnswer);
+    EXPECT_EQ(Dot, rightAnswer);
 }
-TEST(GACubeMathRepresentation, dotProduct10)
+TEST(MathDotProductFunc, DotProduct10)
 {
     std::vector<double> vec1 = {0.677658458,-0.5324523632,-0.00063456};
     std::vector<double> vec2 = {-2.45645745,1.45754685,-0.65865};
 
-    double dot = GACubeMathRepresentation::dotProduct(vec1,vec2);
+    double Dot = GACubeMathRepresentation::DotProduct(vec1,vec2);
 
     double rightAnswer = -2.440295479522828;
 
-    EXPECT_EQ(dot, rightAnswer);
+    EXPECT_EQ(Dot, rightAnswer);
 }
